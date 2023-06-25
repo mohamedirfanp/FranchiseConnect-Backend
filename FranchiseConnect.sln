@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 17.5.33502.453
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Microservices", "Microservices", "{F1581D40-66A2-4C00-B318-E8EA07E48946}"
+	ProjectSection(SolutionItems) = preProject
+		ApiGateway\AuthenticationExtensions.cs = ApiGateway\AuthenticationExtensions.cs
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AccoutGRPCService", "AccoutGRPCService\AccoutGRPCService.csproj", "{560D6626-53F9-46EF-96D9-86BAF926E5DB}"
 EndProject

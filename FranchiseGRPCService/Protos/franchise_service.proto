@@ -5,7 +5,7 @@ package franchise;
 import "protos/franchise_common.proto";
 
 service FranchiseServiceService {
-  rpc CreateFranchiseService(FranchiseServiceModel) returns (CreateFranchiseServiceResponse);
+  rpc CreateFranchiseService(FranchiseServiceModelRequest) returns (CreateFranchiseServiceResponse);
 }
 
 

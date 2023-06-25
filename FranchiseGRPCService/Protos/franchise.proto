@@ -20,17 +20,18 @@ message GetFranchiseByIdRequest
 message CreateFranchiseRequest 
 {
 	Franchise franchise = 1;
-	repeated FranchiseGallery franchiseGalleryList = 2;
-	repeated FranchiseServiceModel franchiseServiceList = 3; 
-	FranchiseSocialModel frachiseSocial = 4;
+	repeated FranchiseGalleryRequest franchiseGalleryList = 2;
+	repeated FranchiseServiceModelRequest franchiseServiceList = 3; 
+	FranchiseSocialModelRequest frachiseSocial = 4;
 }
 
 message GetFranchisesRespsonse
 {
 	Franchise franchise = 1;
-	repeated FranchiseGallery franchiseGallery = 2;
-	repeated FranchiseServiceModel frachiseServiceList = 3;
-	repeated FranchiseReview franchiseReview = 4;
+	FranchiseSocialModelResponse franchiseSocial = 2;
+	repeated FranchiseGalleryResponse franchiseGalleryList = 3;
+	repeated FranchiseServiceModelResponse frachiseServiceList = 4;
+	repeated FranchiseReview franchiseReviewList = 5;
 }
 
 message GetFranchiseResponse

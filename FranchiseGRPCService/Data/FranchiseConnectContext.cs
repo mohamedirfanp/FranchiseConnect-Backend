@@ -9,6 +9,13 @@ namespace FranchiseGRPCService.Data
         public FranchiseConnectContext(DbContextOptions<FranchiseConnectContext> options) : base(options)
         { }
 
+        public DbSet<FranchiseModel> FranchiseModel { get; set; } = default!;
+        public DbSet<FranchiseGalleryModel> FranchiseGalleryModel { get; set; } = default!;
+        public DbSet<FranchiseRequestModel> FranchiseRequestModel { get; set; } = default!;
+        public DbSet<FranchiseReviewModel> FranchiseReviewModel { get; set; } = default!;
+        public DbSet<FranchiseServiceModel> FranchiseServiceModel { get; set; } = default!;
+        public DbSet<FranchiseSocialModel> FranchiseSocialModel { get; set; } = default!;
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<FranchiseModel>()

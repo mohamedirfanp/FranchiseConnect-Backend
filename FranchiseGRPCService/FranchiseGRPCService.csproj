@@ -19,10 +19,6 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.14" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="ServiceHandlers\" />
-  </ItemGroup>
-
 	<ItemGroup>
 		<Protobuf Include="Protos\franchise_common.proto" GrpcServices="Server" />
 		<Protobuf Include="Protos\franchise_social.proto" GrpcServices="Server" />
