@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package franchise;
+
+import "protos/franchise_common.proto";
+
+service FranchiseGalleryService {
+  rpc GetFranchiseGallery(FranchiseRequest) returns (stream FranchiseGallery);
+  rpc UploadFranchisePhoto(FranchiseGallery) returns (FranchiseGallery);
+  rpc DeleteFranchisePhoto(FranchiseRequest) returns (FranchiseRequest);
+}
+
+

@@ -1,0 +1,44 @@
+syntax = "proto3";
+option csharp_namespace = "FranchiseGRPCService.Protos";
+
+package franchise;
+
+import "protos/franchise_common.proto";
+import "google/protobuf/empty.proto";
+
+service FranchiseService {
+  rpc CreateFranchise(CreateFranchiseRequest) returns (CreateFranchiseResponse);
+  rpc GetAllFranchise(google.protobuf.Empty) returns (GetFranchiseResponse); 
+  rpc GetFranchiseById(GetFranchiseByIdRequest) returns (GetFranchisesRespsonse);
+}
+
+message GetFranchiseByIdRequest
+{
+	int32 franchiseId = 1;
+}
+
+message CreateFranchiseRequest 
+{
+	Franchise franchise = 1;
+	repeated FranchiseGallery franchiseGalleryList = 2;
+	repeated FranchiseServiceModel franchiseServiceList = 3; 
+	FranchiseSocialModel frachiseSocial = 4;
+}
+
+message GetFranchisesRespsonse
+{
+	Franchise franchise = 1;
+	repeated FranchiseGallery franchiseGallery = 2;
+	repeated FranchiseServiceModel frachiseServiceList = 3;
+	repeated FranchiseReview franchiseReview = 4;
+}
+
+message GetFranchiseResponse
+{
+	repeated GetFranchisesRespsonse franchiseLists = 1;
+}
+
+message CreateFranchiseResponse
+{
+	string response = 1;
+}

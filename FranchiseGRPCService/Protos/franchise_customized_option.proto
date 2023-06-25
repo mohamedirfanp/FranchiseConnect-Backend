@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package franchise;
+
+import "protos/franchise_common.proto";
+
+service FranchiseCustomizedOptionService {
+  rpc CreateFranchiseCustomizedOption(FranchiseCustomizedOption) returns (FranchiseCustomizedOption);
+  rpc DeleteFranchiseCustomizedOption(FranchiseRequest) returns (FranchiseRequest);
+}
+
+message FranchiseCustomizedOption {
+  int32 franchise_customized_option_id = 1;
+  string franchise_customize_option_name = 2;
+  int32 franchise_id = 3;
+}

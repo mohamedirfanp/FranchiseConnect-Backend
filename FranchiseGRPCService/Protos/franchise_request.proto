@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package franchise;
+
+
+
+service FranchiseRequestService {
+  rpc CreateFranchiseRequest(CreateFranchiseUserRequest) returns (CreateFranchiseUserResponse);
+  //rpc DeleteFranchiseRequest(FranchiseRequest) returns (FranchiseRequest);
+}
+
+message CreateFranchiseUserRequest
+{
+	int32 franchise_request_id = 1;
+	int32 franchise_id = 2;
+	bool franchise_sample_box_option = 3;
+	string franchise_request_report = 4;
+}
+
+message CreateFranchiseUserResponse
+{
+	string response = 1;
+}
