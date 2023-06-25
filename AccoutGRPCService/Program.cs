@@ -1,5 +1,6 @@
 using AccoutGRPCService.Data;
 using AccoutGRPCService.HandlerServices.AuthenticationService;
+using AccoutGRPCService.HandlerServices.AccountServices;
 using AccoutGRPCService.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -45,19 +46,30 @@ namespace AccoutGRPCService
 
             // Add services to the container.
             builder.Services.AddGrpc();
+            builder.Services.AddGrpcReflection();
+
             builder.Services.AddAuthorization();
-            builder.Services.AddScoped<IAuthService, AuthService>();
+            builder.Services.AddScoped<IAuthHandlerService, AuthHandlerService>();
+            builder.Services.AddScoped<IAccountHandlerService, AccountHandlerService>();
+
+            builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
             app.MapGrpcService<GreeterService>();
-            app.MapGrpcService<AuthHandlerService>();
+            app.MapGrpcService<Services.AuthService>();
+            app.MapGrpcService<Services.AccountService>();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-
+            // DEV
+            IWebHostEnvironment env = app.Environment;
+            if(env.IsDevelopment())
+            { 
+                app.MapGrpcReflectionService();
+            }
 
             app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 

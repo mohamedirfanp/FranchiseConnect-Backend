@@ -1,0 +1,20 @@
+﻿
+using AccoutGRPCService.Protos;
+using Microsoft.AspNetCore.Mvc;
+
+namespace AccoutGRPCService.HandlerServices.AccountServices
+{
+    public interface IAccountHandlerService
+    {
+        // To Get User Profile
+        GetProfileResponse GetProfile();
+
+
+        // To Update Profile for User
+
+        UpdateUserResponse UpdateProfileForUser(UpdateUserRequest user);
+
+
+
+    }
+}

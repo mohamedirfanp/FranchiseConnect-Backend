@@ -10,22 +10,23 @@ using System.Security.Cryptography;
 
 namespace AccoutGRPCService.HandlerServices.AuthenticationService
 {
-    public class AuthService : IAuthService
+    public class AuthHandlerService : IAuthHandlerService
     {
         //private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly FranchiseConnectContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-
-        public AuthService(FranchiseConnectContext context, IConfiguration configuration)
+        public AuthHandlerService(FranchiseConnectContext context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
         // To Get the Current User ID
         public int GetCurrentUserId()
         {
-            var userId = "1";
+            var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
             return int.Parse(userId);
         }
 
@@ -140,6 +141,40 @@ namespace AccoutGRPCService.HandlerServices.AuthenticationService
                 {
                     JwtToken = jwtToken,
                 };
+            }
+            catch (Exception ex)
+            {
+                throw new RpcException(new Status(StatusCode.Unknown, ex.Message));
+            }
+
+        }
+
+        // A function to Change Password 
+        public ChangePasswordResponse ChangePassword(ChangePasswordResquest changePasswordRequest)
+        {
+            try
+            {
+                var currentUserId = GetCurrentUserId();
+
+                //string currentRole = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
+
+                var currentUser = _context.User.Where(user => user.UserId == currentUserId).FirstOrDefault();
+                if (!VerifyPasswordHash(changePasswordRequest.OldPassword, currentUser.PasswordHash, currentUser.PasswordSalt))
+                {
+                    throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid Password"));
+                }
+
+                CreatePasswordHash(changePasswordRequest.NewPassword, out byte[] passwordHash, out byte[] passwordSalt);
+
+                currentUser.PasswordHash = passwordHash;
+                currentUser.PasswordSalt = passwordSalt;
+
+                _context.SaveChanges();
+
+
+
+                return new ChangePasswordResponse { Response = "Successfully Password Changed" };
+
             }
             catch (Exception ex)
             {
