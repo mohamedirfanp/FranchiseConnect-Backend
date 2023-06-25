@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+option csharp_namespace = "AccoutGRPCService.Protos";
+
+
+
+package authService;
+
+// The Auth service definition.
+service AuthenticationHandler {
+  // Sign Up a User
+  rpc SignUpUser (UserCreationRequest) returns (UserCreationResponse);
+  // Sign In a User
+  rpc SignInUser (AuthenticationRequest) returns (AuthenticationResponse);
+}
+
+message UserSignUpDto {
+  string user_name = 1;
+  string user_email = 2;
+  string user_phone_number = 3;
+  string user_role = 4;
+  string password = 5;
+}
+
+message UserSignInDto
+{
+	string email = 1;
+	string password = 2;
+}
+
+message UserCreationRequest
+{
+	UserSignUpDto userRequest = 1;
+}
+
+message UserCreationResponse
+{
+	string response = 1;
+}
+
+message AuthenticationRequest 
+{
+	UserSignInDto userRequest = 1;
+}
+
+message AuthenticationResponse
+{
+	string jwtToken = 1;
+}
+
