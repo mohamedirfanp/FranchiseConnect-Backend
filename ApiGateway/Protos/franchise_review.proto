@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+package franchise;
+
+import "protos/franchise_common.proto";
+
+service FranchiseReviewService {
+  rpc CreateFranchiseReview(FranchiseReview) returns (FranchiseReview);
+  rpc UpdateFranchiseReview(FranchiseReview) returns (FranchiseReview);
+  //rpc DeleteFranchiseReview(FranchiseRequest) returns (FranchiseRequest);
+}
+
+

@@ -1,0 +1,14 @@
+syntax = "proto3";
+
+
+import "protos/franchise_common.proto";
+
+package franchise;
+
+service FranchiseSocialService {
+  rpc CreateFranchiseSocial(FranchiseSocialModelRequest) returns (FranchiseSocialModelResponse);
+  rpc UpdateFranchiseSocial(FranchiseSocialModelRequest) returns (FranchiseSocialModelResponse);
+  //rpc DeleteFranchiseSocial(FranchiseRequest) returns (FranchiseRequest);
+}
+
+

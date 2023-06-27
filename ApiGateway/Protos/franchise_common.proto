@@ -1,0 +1,72 @@
+syntax = "proto3";
+
+package franchise;
+
+message Franchise {
+  int32  franchise_id = 1;
+  string franchise_name = 2;
+  string franchise_industry = 3;
+  string franchise_segment = 4;
+  string franchise_about = 5;
+  string franchise_investment = 6;
+  string franchise_fee = 7;
+  string franchise_space = 8;
+  string franchise_current_count = 9;
+  string franchise_preferred_expansion_location = 10;
+  int32  franchise_view_count = 11;
+  bool   franchise_sample_box_option = 12;
+  bool   franchise_customized_option = 13;
+  int32  franchise_owner_id = 14;
+}
+
+message FranchiseGalleryRequest
+{
+	string franchise_photo_url = 1;
+}
+
+message FranchiseGalleryResponse {
+  int32 franchise_gallery_id = 1;
+  string franchise_photo_url = 2;
+  int32 franchise_id = 3;
+}
+
+message FranchiseReview {
+  int32 franchise_review_id = 1;
+  string franchise_review = 2;
+  string franchise_rating = 3;
+  int32 franchise_id = 4;
+}
+
+message FranchiseRequest
+{
+	int32 franchise_id = 1;
+}
+
+message FranchiseServiceModelRequest {
+  string franchise_provide_service_name = 2;
+}
+
+message FranchiseServiceModelResponse
+{
+	int32 franchise_service_id = 1;
+	string franchise_provide_service_name = 2;
+	int32 franchise_id = 3;
+}
+
+message FranchiseSocialModelRequest
+{
+	string franchise_email = 2;
+	string franchise_website = 3;
+	string franchise_facebook = 4;
+	string franchise_twitter = 5;
+	string franchise_instagram = 6;
+}
+
+message FranchiseSocialModelResponse {
+  int32 franchise_social_id = 1;
+  string franchise_email = 2;
+  string franchise_website = 3;
+  string franchise_facebook = 4;
+  string franchise_twitter = 5;
+  string franchise_instagram = 6;
+}

@@ -1,0 +1,16 @@
+syntax = "proto3";
+
+package franchise;
+
+import "protos/franchise_common.proto";
+
+service FranchiseServiceService {
+  rpc CreateFranchiseService(FranchiseServiceModelRequest) returns (CreateFranchiseServiceResponse);
+}
+
+
+
+message CreateFranchiseServiceResponse
+{
+	string response = 1;
+}

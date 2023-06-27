@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Protos\Protos\**" />
+    <Content Remove="Protos\Protos\**" />
+    <EmbeddedResource Remove="Protos\Protos\**" />
+    <None Remove="Protos\Protos\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove="Protos\account.proto" />
   </ItemGroup>
 
@@ -25,16 +32,24 @@
 
   <ItemGroup>
     <None Update="Protos\authHandler.proto">
-      <GrpcServices>Server</GrpcServices>
+      <GrpcServices>Client</GrpcServices>
     </None>
     <None Update="Protos\greet.proto">
-      <GrpcServices>Server</GrpcServices>
+      <GrpcServices>Client</GrpcServices>
     </None>
   </ItemGroup>
 
 	<ItemGroup>
 		<Protobuf Include="Protos\account.proto" GrpcServices="Client" />
 		<Protobuf Include="Protos\authHandler.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\franchise_common.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\franchise_social.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\franchise_service.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\franchise.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\franchise_customized_option.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\franchise_gallery.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\franchise_request.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\franchise_review.proto" GrpcServices="Client" />
 	</ItemGroup>
 
 </Project>
