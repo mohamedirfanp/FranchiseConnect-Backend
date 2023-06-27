@@ -1,4 +1,5 @@
 ﻿using FranchiseGRPCService.Protos;
+using Microsoft.AspNetCore.Mvc;
 
 namespace FranchiseGRPCService.ServiceHandlers.FranchiseServiceHandlers
 {
@@ -8,7 +9,7 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseServiceHandlers
         CreateFranchiseResponse CreateFranchise(CreateFranchiseRequest request);
 
         // A function to get all the franchise
-        GetFranchiseResponse GetFranchise();
+        void GetAllFranchise();
 
         // A function to get the franchise by Id
         GetFranchiseResponse GetFranchiseById(GetFranchiseByIdRequest request);
