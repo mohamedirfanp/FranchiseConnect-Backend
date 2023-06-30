@@ -15,6 +15,9 @@ namespace FranchiseGRPCService.Data
         public DbSet<FranchiseReviewModel> FranchiseReviewModel { get; set; } = default!;
         public DbSet<FranchiseServiceModel> FranchiseServiceModel { get; set; } = default!;
         public DbSet<FranchiseSocialModel> FranchiseSocialModel { get; set; } = default!;
+        public DbSet<FranchiseCustomizedOptionModel> FranchiseCustomizedOptionModel { get; set; } = default!;
+        public DbSet<FranchiseSelectedService> FranchiseSelectedServiceModel { get; set; } = default!;
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -33,6 +36,13 @@ namespace FranchiseGRPCService.Data
                  .HasMany(franchiseGallery => franchiseGallery.franchiseGallery)
                 .WithOne(franchiseId => franchiseId.franchiseId)
                 .HasForeignKey(franchiseId => franchiseId.FranchiseId);
+
+            modelBuilder.Entity<FranchiseCustomizedOptionModel>()
+                .HasMany(franchiseSelectedService => franchiseSelectedService.FranchiseSelectedServices)
+                .WithOne(franchiseCustom => franchiseCustom.FranchiseCustomizedOption)
+                .HasForeignKey(franchiseCustom => franchiseCustom.FranchiseSelectedServiceId);
+
+
 
             
 

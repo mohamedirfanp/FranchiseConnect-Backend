@@ -9,10 +9,10 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseServiceHandlers
         CreateFranchiseResponse CreateFranchise(CreateFranchiseRequest request);
 
         // A function to get all the franchise
-        void GetAllFranchise();
+        GetFranchiseResponse GetAllFranchise();
 
         // A function to get the franchise by Id
-        GetFranchiseResponse GetFranchiseById(GetFranchiseByIdRequest request);
+        GetFranchisesRespsonse GetFranchiseById(GetFranchiseByIdRequest request);
 
     }
 }
