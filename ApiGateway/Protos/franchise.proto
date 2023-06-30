@@ -34,9 +34,16 @@ message GetFranchisesRespsonse
 	repeated FranchiseReview franchiseReviewList = 5;
 }
 
+message GetAllFranchiseResponse
+{
+	Franchise franchise = 1;
+	FranchiseSocialModelResponse franchiseSocial = 2;
+	repeated FranchiseGalleryResponse franchiseGalleryList = 3;
+}
+
 message GetFranchiseResponse
 {
-	repeated GetFranchisesRespsonse franchiseLists = 1;
+	repeated GetAllFranchiseResponse franchiseLists = 1;
 }
 
 message CreateFranchiseResponse

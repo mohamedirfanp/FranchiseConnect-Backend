@@ -6,8 +6,22 @@ import "protos/franchise_common.proto";
 
 service FranchiseGalleryService {
   rpc GetFranchiseGallery(FranchiseRequest) returns (stream FranchiseGalleryResponse);
-  rpc UploadFranchisePhoto(FranchiseGalleryRequest) returns (FranchiseGalleryResponse);
-  rpc DeleteFranchisePhoto(FranchiseRequest) returns (FranchiseRequest);
+  rpc UploadFranchisePhoto(FranchiseGalleryUploadRequest) returns (FranchiseGalleryResponseMessage);
+  rpc DeleteFranchisePhoto(FranchiseGalleryDeleteRequest) returns (FranchiseGalleryResponseMessage);
 }
 
+message FranchiseGalleryResponseMessage
+{
+	string response = 1;
+}
 
+message FranchiseGalleryDeleteRequest
+{
+	int32 franchise_gallery_id = 1;
+}
+
+message FranchiseGalleryUploadRequest
+{
+	int32 franchise_id = 1;
+	string franchise_photo_url = 2;
+}

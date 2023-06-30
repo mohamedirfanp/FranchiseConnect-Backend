@@ -9,112 +9,205 @@ using ApiGateway.Dto_Models;
 
 namespace ApiGateway.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class FranchiseController : ControllerBase
-    {
-        // GET: api/<FranchiseController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
+	[Route("api/[controller]")]
+	[ApiController]
+	public class FranchiseController : ControllerBase
+	{
+		// GET: api/<FranchiseController>
+		[HttpGet]
+		public GetFranchiseResponse Get()
+		{
+			var channel = GrpcChannel.ForAddress("https://localhost:7290");
+			try
+			{
+				var client = new FranchiseService.FranchiseServiceClient(channel);
 
-        // GET api/<FranchiseController>/5
-        [HttpGet("{id}")]
-        public void Get(int id)
-        {
-            var channel = GrpcChannel.ForAddress("https://localhost:7290");
+				var response = client.GetAllFranchise(new Google.Protobuf.WellKnownTypes.Empty { });
+
+				channel.ShutdownAsync().Wait();
+				return response;
+
+			}
+			catch(RpcException ex)
+			{
+				throw new RpcException(new Status(Grpc.Core.StatusCode.Unimplemented, ex.Message)); 
+			}
+
+		}
+
+		// GET api/<FranchiseController>/5
+		[HttpGet("{id}")]
+		public GetFranchisesRespsonse Get(int id)
+		{
+			var channel = GrpcChannel.ForAddress("https://localhost:7290");
+
+			try
+			{
+				var client = new FranchiseService.FranchiseServiceClient(channel);
+				var response = client.GetFranchiseById(new GetFranchiseByIdRequest { FranchiseId = id });
+				
+				channel.ShutdownAsync().Wait();
+
+				return response;
+
+			}
+			catch (RpcException ex)
+			{
+				throw new RpcException(new Status(Grpc.Core.StatusCode.Unimplemented, ex.Message));
+			}
+		}
+
+		// POST api/<FranchiseController>
+		[HttpPost]
+		public IActionResult Post([FromBody] CreateFranchiseDto request)
+		{
+			var channel = GrpcChannel.ForAddress("https://localhost:7290");
+
+			try
+			{
+
+				var client = new FranchiseService.FranchiseServiceClient(channel);
+
+				CreateFranchiseRequest newFranchise = new CreateFranchiseRequest()
+				{
+					Franchise = new Franchise.Franchise()
+					{
+						FranchiseName = request.Franchise.FranchiseName,
+						FranchiseAbout = request.Franchise.FranchiseAbout,
+						FranchiseCurrentCount = request.Franchise.FranchiseCurrentCount,
+						FranchiseCustomizedOption = request.Franchise.FranchiseCustomizedOption,
+						FranchiseFee = request.Franchise.FranchiseFee,
+						FranchiseIndustry = request.Franchise.FranchiseIndustry,
+						FranchiseInvestment = request.Franchise.FranchiseInvestment,
+						FranchisePreferredExpansionLocation = request.Franchise.FranchisePreferredExpansionLocation,
+						FranchiseSegment = request.Franchise.FranchiseSpace,
+						FranchiseSpace = request.Franchise.FranchiseSpace,
+						FranchiseSampleBoxOption = request.Franchise.FranchiseSampleBoxOption,
+						FranchiseViewCount = request.Franchise.FranchiseViewCount
+					},
+					FrachiseSocial = request.FranchiseSocialRequest
+				};
+
+				foreach (var gallery in request.GalleryRequestList)
+				{
+					newFranchise.FranchiseGalleryList.Add(new FranchiseGalleryRequest()
+					{
+						FranchisePhotoUrl = gallery
+					});
+				}
+
+				foreach (var service in request.FranchiseServiceRequestsList)
+				{
+					newFranchise.FranchiseServiceList.Add(new FranchiseServiceModelRequest()
+					{
+						FranchiseProvideServiceName = service.FranchiseProvideServiceName,
+						FranchiseProvideServiceDescription =  service.FranchiseProvideServiceDescription
+					});
+		 
+				}
+
+
+				var response = client.CreateFranchise(newFranchise);
+				return Ok(response);
+
+			}
+			catch (RpcException ex)
+			{
+				return BadRequest(ex.Message);
+			}
+			
+			//channel.ShutdownAsync().Wait();
+		}
+
+
+		/// Franchise Gallery Endpoints
+		// PUT Franchise - api/<FranchiseController>/gallery
+		[HttpPut("gallery/upload")]
+		public IActionResult uploadGalleryRequest([FromBody] FranchiseGalleryUploadRequest request)
+		{
+			var channel = GrpcChannel.ForAddress("https://localhost:7290");
+
+			try
+			{
+				var client = new FranchiseGalleryService.FranchiseGalleryServiceClient(channel);
+
+				var response = client.UploadFranchisePhoto(request);
+
+				return Ok(response);
+
+			}
+			catch (RpcException ex)
+			{
+				return BadRequest(ex.Message);
+            }
+		}
+
+		[HttpDelete("gallery/delete")]
+		public IActionResult deleteGalleryRequest([FromBody] FranchiseGalleryDeleteRequest request)
+		{
 
             try
             {
-                var client = new FranchiseService.FranchiseServiceClient(channel);
-                var response = client.GetFranchiseById(new GetFranchiseByIdRequest { FranchiseId = id });
-                Console.WriteLine(response);
+				var channel = GrpcChannel.ForAddress("https://localhost:7290");
+                var client = new FranchiseGalleryService.FranchiseGalleryServiceClient(channel);
+
+				var response = client.DeleteFranchisePhoto(request);
+
+                return Ok(response);
 
             }
             catch (RpcException ex)
             {
-                Console.WriteLine(ex.Message, ex.StatusCode);
+                return BadRequest(ex.Message);
             }
-            channel.ShutdownAsync().Wait();
         }
 
-        // POST api/<FranchiseController>
-        [HttpPost]
-        public IActionResult Post([FromBody] CreateFranchiseDto request)
-        {
-            var channel = GrpcChannel.ForAddress("https://localhost:7290");
 
+		/* Franchise Provide Service Endpoints*/
+
+		// Create a new Provide Service in the Franchise 
+		[HttpPut("service/create")]
+		public IActionResult CreateProvideService([FromBody] CreateFranchiseServiceRequest request)
+		{
             try
             {
-                Console.WriteLine("Data" + request);
-                Console.WriteLine("Franchise About "+ request.Franchise.FranchiseAbout);
-                Console.WriteLine("Franchise Social webiste "+ request.FranchiseSocialRequest.FranchiseWebsite);
+                var channel = GrpcChannel.ForAddress("https://localhost:7290");
+				var client = new FranchiseServiceService.FranchiseServiceServiceClient(channel);
+				
+				var response = client.CreateFranchiseService(request);
 
-                var client = new FranchiseService.FranchiseServiceClient(channel);
-
-                CreateFranchiseRequest newFranchise = new CreateFranchiseRequest()
-                {
-                    Franchise = new Franchise.Franchise()
-                    {
-                        FranchiseName = request.Franchise.FranchiseName,
-                        FranchiseAbout = request.Franchise.FranchiseAbout,
-                        FranchiseCurrentCount = request.Franchise.FranchiseCurrentCount,
-                        FranchiseCustomizedOption = request.Franchise.FranchiseCustomizedOption,
-                        FranchiseFee = request.Franchise.FranchiseFee,
-                        FranchiseIndustry = request.Franchise.FranchiseIndustry,
-                        FranchiseInvestment = request.Franchise.FranchiseInvestment,
-                        FranchisePreferredExpansionLocation = request.Franchise.FranchisePreferredExpansionLocation,
-                        FranchiseSegment = request.Franchise.FranchiseSpace,
-                        FranchiseSpace = request.Franchise.FranchiseSpace,
-                        FranchiseSampleBoxOption = request.Franchise.FranchiseSampleBoxOption,
-                        FranchiseViewCount = request.Franchise.FranchiseViewCount
-                    },
-                    FrachiseSocial = request.FranchiseSocialRequest
-                };
-
-                foreach (var gallery in request.GalleryRequestList)
-                {
-                    newFranchise.FranchiseGalleryList.Add(new FranchiseGalleryRequest()
-                    {
-                        FranchisePhotoUrl = gallery
-                    });
-                }
-
-                foreach (var service in request.FranchiseServiceRequestsList)
-                {
-                    newFranchise.FranchiseServiceList.Add(new FranchiseServiceModelRequest()
-                    {
-                        FranchiseProvideServiceName = service
-                    });
-         
-                }
-
-
-                var response = client.CreateFranchise(newFranchise);
-                Console.WriteLine(response);
-
+                return Ok(response);
 
             }
             catch (RpcException ex)
             {
-                Console.WriteLine(ex.Message, ex.StatusCode);
+                return BadRequest(ex.Message);
             }
-            return Ok(request);
-            //channel.ShutdownAsync().Wait();
         }
 
-        // PUT api/<FranchiseController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
+		// Delete a existing Provided Service in the Franchise
+		[HttpDelete("service/delete/{franchise_provide_service_id}")]
+		public IActionResult DeleteProvideService(int franchise_provide_service_id)
+		{
+            try
+            {
+                var channel = GrpcChannel.ForAddress("https://localhost:7290");
+                var client = new FranchiseServiceService.FranchiseServiceServiceClient(channel);
+
+                var response = client.DeleteFranchiseService(new DeleteFranchiseServiceRequest()
+				{
+					FranchiseProvideServiceId = franchise_provide_service_id
+				});
+
+                return Ok(response);
+
+            }
+            catch (RpcException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
-        // DELETE api/<FranchiseController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
-        }
-    }
+
+	}
 }

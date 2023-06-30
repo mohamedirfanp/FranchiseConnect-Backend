@@ -44,12 +44,14 @@ message FranchiseRequest
 
 message FranchiseServiceModelRequest {
   string franchise_provide_service_name = 2;
+  string franchise_provide_service_description = 1;
 }
 
 message FranchiseServiceModelResponse
 {
 	int32 franchise_service_id = 1;
 	string franchise_provide_service_name = 2;
+	string franchise_provide_service_description = 4;
 	int32 franchise_id = 3;
 }
 
