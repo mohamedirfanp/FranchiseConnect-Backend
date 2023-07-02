@@ -36,6 +36,7 @@
 		<Protobuf Include="Protos\franchise_gallery.proto" GrpcServices="Server" />
 		<Protobuf Include="Protos\franchise_request.proto" GrpcServices="Server" />
 		<Protobuf Include="Protos\franchise_review.proto" GrpcServices="Server" />
+		<Protobuf Include="Protos\user_wishlist.proto" GrpcServices="Server" />
 	</ItemGroup>
 
 </Project>

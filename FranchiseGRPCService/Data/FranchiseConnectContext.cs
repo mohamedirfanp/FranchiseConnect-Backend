@@ -18,6 +18,8 @@ namespace FranchiseGRPCService.Data
         public DbSet<FranchiseCustomizedOptionModel> FranchiseCustomizedOptionModel { get; set; } = default!;
         public DbSet<FranchiseSelectedService> FranchiseSelectedServiceModel { get; set; } = default!;
 
+        public DbSet<UserWishlistModel> UserWishlistModel { get; set; } = default!;
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

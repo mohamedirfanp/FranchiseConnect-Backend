@@ -13,9 +13,17 @@ namespace FranchiseGRPCService.Models
         [Column("franchise_sample_box_option")]
         public bool FranchiseSampleBoxOption { get; set; }
 
-        [Column("franchise_request_report")]
-        [StringLength(250)]
-        public string FranchiseRequestReport { get; set; }
+        [Column("franchise_customized_option")]
+        public bool FranchiseCustomizedOption { get; set; }
+
+        [Column("franchise_customized_option_id")]
+        public int FranchiseCustomizedOptionId { get; set; }
+
+        [Column("owner_id")]
+        public int ownerId { get; set; }
+
+        [Column("is_request_status")]
+        public string IsRequestStatus { get; set; }
 
         [Column("franchise_id")]
         [ForeignKey("franchiseId")]

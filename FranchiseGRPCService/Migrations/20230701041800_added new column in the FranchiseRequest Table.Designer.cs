@@ -3,6 +3,7 @@ using FranchiseGRPCService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FranchiseGRPCService.Migrations
 {
     [DbContext(typeof(FranchiseConnectContext))]
-    partial class FranchiseConnectContextModelSnapshot : ModelSnapshot
+    [Migration("20230701041800_added new column in the FranchiseRequest Table")]
+    partial class addednewcolumnintheFranchiseRequestTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -187,15 +189,6 @@ namespace FranchiseGRPCService.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("franchise_sample_box_option");
 
-                    b.Property<string>("IsRequestStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("is_request_status");
-
-                    b.Property<int>("ownerId")
-                        .HasColumnType("int")
-                        .HasColumnName("owner_id");
-
                     b.HasKey("FranchiseRequestId");
 
                     b.HasIndex("FranchiseId")
@@ -334,27 +327,6 @@ namespace FranchiseGRPCService.Migrations
                     b.ToTable("FranchiseSocial", "dbo");
                 });
 
-            modelBuilder.Entity("FranchiseGRPCService.Models.UserWishlistModel", b =>
-                {
-                    b.Property<int>("UserWishlistId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserWishlistId"), 1L, 1);
-
-                    b.Property<int>("FranchiseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserWishlistId");
-
-                    b.HasIndex("FranchiseId");
-
-                    b.ToTable("UserWishlistModel");
-                });
-
             modelBuilder.Entity("FranchiseGRPCService.Models.FranchiseGalleryModel", b =>
                 {
                     b.HasOne("FranchiseGRPCService.Models.FranchiseModel", "franchiseId")
@@ -422,17 +394,6 @@ namespace FranchiseGRPCService.Migrations
                 {
                     b.HasOne("FranchiseGRPCService.Models.FranchiseModel", "franchiseId")
                         .WithMany("franchiseServices")
-                        .HasForeignKey("FranchiseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("franchiseId");
-                });
-
-            modelBuilder.Entity("FranchiseGRPCService.Models.UserWishlistModel", b =>
-                {
-                    b.HasOne("FranchiseGRPCService.Models.FranchiseModel", "franchiseId")
-                        .WithMany()
                         .HasForeignKey("FranchiseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

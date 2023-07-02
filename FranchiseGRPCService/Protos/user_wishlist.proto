@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+option csharp_namespace = "FranchiseGRPCService.Protos";
+
+package franchise;
+
+import "protos/franchise_common.proto";
+
+
+service UserWishListService {
+  rpc AddUserWishList (AddUserWishListRequest) returns (UserWishListServiceResponse);
+  rpc RemoveUserWishList (RemoveUserWishListRequest) returns (UserWishListServiceResponse);
+  rpc GetUserWishList (GetUserWishListRequest) returns (GetUserWishListResponse);
+}
+
+message AddUserWishListRequest
+{
+	int32 franchise_id = 1;
+	int32 user_id = 2;
+	
+}
+
+message RemoveUserWishListRequest
+{
+	int32 user_wishlist_id = 1;
+}
+
+message UserWishListServiceResponse
+{
+	string response = 1;
+}
+
+message GetUserWishListRequest
+{
+	int32 user_id = 1;
+}
+
+message UserWishList
+{
+	Franchise franchise = 1;
+	int32 user_id = 2;
+}
+
+message GetUserWishListResponse
+{
+	repeated UserWishList user_wishlist_response = 1;
+}

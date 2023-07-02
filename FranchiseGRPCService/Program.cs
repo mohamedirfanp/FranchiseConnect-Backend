@@ -5,6 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using AutoMapper;
 using FranchiseGRPCService.ServiceHandlers.FranchiseGalleryHandlers;
 using FranchiseGRPCService.ServiceHandlers.FranchiseProvideServiceHandlers;
+using FranchiseGRPCService.ServiceHandlers.FranchiseRequestHandlers;
+using FranchiseGRPCService.ServiceHandlers.UserWishListHandler;
 
 namespace FranchiseGRPCService
 {
@@ -38,11 +40,11 @@ namespace FranchiseGRPCService
 
             builder.Services.AddAuthorization();
             builder.Services.AddScoped<IFranchiseServiceHandler, FranchiseServiceHandler>();
-                      builder.Services.AddScoped<IFranchiseGalleryHandler,FranchiseGalleryHandler>();
+            builder.Services.AddScoped<IFranchiseGalleryHandler,FranchiseGalleryHandler>();
             builder.Services.AddScoped<IFranchiseProvideServiceHandler, FranchiseProvideServiceHandler>();
+            builder.Services.AddScoped<IFranchiseRequestHandler, FranchiseRequestHandler>();
+            builder.Services.AddScoped<IUserWishlistServiceHandler, UserWishlistServiceHandler>();
 
-
-            builder.Services.AddHttpContextAccessor();
 
 
             var app = builder.Build();
@@ -52,6 +54,8 @@ namespace FranchiseGRPCService
             app.MapGrpcService<Services.franchiseService>();
             app.MapGrpcService<Services.FranchiseGalleryServices>();
             app.MapGrpcService<Services.FranchiseProvideService>();
+            app.MapGrpcService<Services.FranchiseRequest>();
+            app.MapGrpcService<Services.UserWishlistService>();
 
             app.UseAuthentication();
             app.UseAuthorization();
@@ -62,6 +66,7 @@ namespace FranchiseGRPCService
             {
                 app.MapGrpcReflectionService();
             }
+
 
             app.MapGet("/", () => "Communication with gRPC endpoints must be made through a gRPC client. To learn how to create a client, visit: https://go.microsoft.com/fwlink/?linkid=2086909");
 

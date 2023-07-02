@@ -13,22 +13,17 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseServiceHandlers
 	public class FranchiseServiceHandler : IFranchiseServiceHandler
 	{
 
-		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly FranchiseConnectContext _context;
         private readonly IMapper _mapper;
 
-        public FranchiseServiceHandler(FranchiseConnectContext context, IHttpContextAccessor httpContextAccessor, IMapper mapper)
+        public FranchiseServiceHandler(FranchiseConnectContext context, IMapper mapper)
 		{
-			_httpContextAccessor = httpContextAccessor;
 			_context = context;
 			_mapper = mapper;
 		}
-		// To Get the Current User ID
-		public int GetCurrentUserId()
-		{
-			var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-			return int.Parse(userId);
-		}
+
+
+
 		// A function to create a franchise
 		public CreateFranchiseResponse CreateFranchise(CreateFranchiseRequest request)
 		{
@@ -50,12 +45,28 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseServiceHandlers
 
 				_context.SaveChanges();
 
+                FranchiseCustomizedOptionModel franchiseCustomizedOptionModel = new FranchiseCustomizedOptionModel();
 
                 // If FranchiseCustomizedOption is true
 				if(request.Franchise.FranchiseCustomizedOption)
 				{
-                    //int franchiseCustomizedId = CreateFranchiseCustomization()
 
+                    franchiseCustomizedOptionModel.FranchiseCustomizedOptionName = $"{request.Franchise.FranchiseName}-Customization"; // TODO : NEED TO Generate Name from Franchise Name
+
+                    _context.FranchiseCustomizedOptionModel.Add(franchiseCustomizedOptionModel);
+                    _context.SaveChanges();
+
+                    foreach (var selectedServive in request.FranchieSelectedServiceList)
+                    {
+                        FranchiseSelectedService franchiseSelectedService = new FranchiseSelectedService()
+                        {
+                            FranchiseCustomizedOptionId = franchiseCustomizedOptionModel.FranchiseCustomizedOptionId,
+                            FranchiseProvideServiceId = selectedServive.FranchiseProvideServiceId,
+                        };
+                        _context.FranchiseSelectedServiceModel.Add(franchiseSelectedService);
+                    }
+
+                    _context.SaveChanges();
                 }
 
 
@@ -73,7 +84,7 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseServiceHandlers
 					FranchiseViewCount = request.Franchise.FranchiseViewCount,
 					FranchiseSampleBoxOption = request.Franchise.FranchiseSampleBoxOption,
 					FranchiseCustomizedOption = request.Franchise.FranchiseCustomizedOption,
-					FranchiseCustomizedOptionId = 1,
+					FranchiseCustomizedOptionId = request.Franchise.FranchiseCustomizedOption ? franchiseCustomizedOptionModel.FranchiseCustomizedOptionId : 0,
 					FranchiseSocialId = franchiseSocial.FranchiseSocialId,
 					FranchiseOwnerId = 1 // GetCurrentID() need to be called
 
@@ -178,6 +189,15 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseServiceHandlers
 				getFranchisesRespsonse.FranchiseGalleryList.AddRange(TypeCastingGalleryList(franchiseDetailFromDB.franchiseGallery));
 				getFranchisesRespsonse.FrachiseServiceList.AddRange(TypeCastingServiceList(franchiseDetailFromDB.franchiseServices));
 
+				if(franchiseDetailFromDB.FranchiseCustomizedOption)
+				{
+					var customizedOption = _context.FranchiseCustomizedOptionModel.Include(f => f.FranchiseSelectedServices).FirstOrDefault(f => f.FranchiseCustomizedOptionId == franchiseDetailFromDB.FranchiseCustomizedOptionId);
+
+					getFranchisesRespsonse.FranchieSelectedServiceList.AddRange(TypeCastingSelectedSericeList(customizedOption.FranchiseSelectedServices));
+
+				
+				}
+
 				return getFranchisesRespsonse;
 
 
@@ -261,32 +281,30 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseServiceHandlers
             return franchiseServiceresponseFromProto;
         }
 
-		
-		// Creating a Franchise Customisation
-		private int CreateFranchiseCustomization(List<FranchiseSelectedServiceRequest> franchiseSelectedServiceRequests)
+		private List<FranchiseSelectedServiceResponse> TypeCastingSelectedSericeList(ICollection<FranchiseSelectedService> franchiseSelectedServices)
 		{
-			FranchiseCustomizedOptionModel franchiseCustomizedOptionModel = new FranchiseCustomizedOptionModel();
-
-			franchiseCustomizedOptionModel.FranchiseCustomizedOptionName = "test"; // TODO : NEED TO Generate Name from Franchise Name
-
-			_context.FranchiseCustomizedOptionModel.Add(franchiseCustomizedOptionModel);
-			_context.SaveChanges();
-
-            foreach (var selectedServive in franchiseSelectedServiceRequests)
+			List<FranchiseSelectedServiceResponse> franchiseSelectedServiceResponsesFromProto = new List<FranchiseSelectedServiceResponse>();
+            foreach (var selectedService in franchiseSelectedServices)
             {
-				FranchiseSelectedService franchiseSelectedService = new FranchiseSelectedService()
+				if(!selectedService.isUserCustomization)
 				{
-					FranchiseCustomizedOptionId = franchiseCustomizedOptionModel.FranchiseCustomizedOptionId,
-					FranchiseProvideServiceId = selectedServive.FranchiseProvideServiceId,
-				};
-				_context.FranchiseSelectedServiceModel.Add(franchiseSelectedService);
+					franchiseSelectedServiceResponsesFromProto.Add(new FranchiseSelectedServiceResponse()
+					{
+						FranchiseCustomizedOptionId = selectedService.FranchiseCustomizedOptionId,
+						FranchiseProvideServiceId = selectedService.FranchiseProvideServiceId,
+						FranchiseSelectedServiceId = selectedService.FranchiseSelectedServiceId
+						
+					});
+
+				}
             }
 
-			_context.SaveChanges();
+			return franchiseSelectedServiceResponsesFromProto;
 
+        }
 
-            return franchiseCustomizedOptionModel.FranchiseCustomizedOptionId;
-		}
+		
+
 		
 	}
 }

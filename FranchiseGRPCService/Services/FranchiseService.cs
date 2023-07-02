@@ -2,7 +2,6 @@
 using FranchiseGRPCService.ServiceHandlers.FranchiseServiceHandlers;
 using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
-using Microsoft.AspNetCore.Mvc;
 
 namespace FranchiseGRPCService.Services
 {

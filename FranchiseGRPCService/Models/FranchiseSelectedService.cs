@@ -23,6 +23,9 @@ namespace FranchiseGRPCService.Models
 
         public int FranchiseCustomizedOptionId { get; set; }
 
+        [Column("user_customization")]
+        public bool isUserCustomization { get; set; } = false;
+
 
         public virtual FranchiseServiceModel FranchiseServiceId { get; set; }
 

@@ -3,20 +3,45 @@ syntax = "proto3";
 package franchise;
 
 
+import "google/protobuf/any.proto";
 
 service FranchiseRequestService {
-  rpc CreateFranchiseRequest(CreateFranchiseUserRequest) returns (CreateFranchiseUserResponse);
+  rpc CreateFranchiseRequest(CreateFranchiseUserRequest) returns (FranchiseUserResponse);
+  rpc GetFranchiseRequest(GetFranchiseRequestByUserID) returns (FranchiseRequestResponseList);
+  rpc UpdateStatus(UpdateStatusRequest) returns (FranchiseUserResponse);
   //rpc DeleteFranchiseRequest(FranchiseRequest) returns (FranchiseRequest);
+}
+
+message GetFranchiseRequestByUserID
+{
+	int32 user_id = 1;
 }
 
 message CreateFranchiseUserRequest
 {
 	int32 franchise_id = 2;
 	bool franchise_sample_box_option = 3;
-	string franchise_request_report = 4;
+	bool franchise_customization_option = 1;
+	int32 franhise_customization_id = 4;
+	int32 owner_id = 5;
 }
 
-message CreateFranchiseUserResponse
+message FranchiseUserResponse
 {
 	string response = 1;
+}
+
+message FranchiseRequestResponse {
+  google.protobuf.Any franchiseRequest = 1;
+  repeated google.protobuf.Any franchiseCustomization = 2;
+}
+
+message FranchiseRequestResponseList {
+  repeated FranchiseRequestResponse responses = 1;
+}
+
+message UpdateStatusRequest
+{
+	int32 franchise_request_id = 1;
+	string is_request_status = 2;
 }

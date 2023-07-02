@@ -3,6 +3,7 @@ using FranchiseGRPCService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -10,9 +11,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FranchiseGRPCService.Migrations
 {
     [DbContext(typeof(FranchiseConnectContext))]
-    partial class FranchiseConnectContextModelSnapshot : ModelSnapshot
+    [Migration("20230701035859_add a column in Selected Service")]
+    partial class addacolumninSelectedService
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -171,30 +173,19 @@ namespace FranchiseGRPCService.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FranchiseRequestId"), 1L, 1);
 
-                    b.Property<bool>("FranchiseCustomizedOption")
-                        .HasColumnType("bit")
-                        .HasColumnName("franchise_customized_option");
-
-                    b.Property<int>("FranchiseCustomizedOptionId")
-                        .HasColumnType("int")
-                        .HasColumnName("franchise_customized_option_id");
-
                     b.Property<int>("FranchiseId")
                         .HasColumnType("int")
                         .HasColumnName("franchise_id");
 
+                    b.Property<string>("FranchiseRequestReport")
+                        .IsRequired()
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)")
+                        .HasColumnName("franchise_request_report");
+
                     b.Property<bool>("FranchiseSampleBoxOption")
                         .HasColumnType("bit")
                         .HasColumnName("franchise_sample_box_option");
-
-                    b.Property<string>("IsRequestStatus")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("is_request_status");
-
-                    b.Property<int>("ownerId")
-                        .HasColumnType("int")
-                        .HasColumnName("owner_id");
 
                     b.HasKey("FranchiseRequestId");
 
@@ -334,27 +325,6 @@ namespace FranchiseGRPCService.Migrations
                     b.ToTable("FranchiseSocial", "dbo");
                 });
 
-            modelBuilder.Entity("FranchiseGRPCService.Models.UserWishlistModel", b =>
-                {
-                    b.Property<int>("UserWishlistId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserWishlistId"), 1L, 1);
-
-                    b.Property<int>("FranchiseId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UserWishlistId");
-
-                    b.HasIndex("FranchiseId");
-
-                    b.ToTable("UserWishlistModel");
-                });
-
             modelBuilder.Entity("FranchiseGRPCService.Models.FranchiseGalleryModel", b =>
                 {
                     b.HasOne("FranchiseGRPCService.Models.FranchiseModel", "franchiseId")
@@ -422,17 +392,6 @@ namespace FranchiseGRPCService.Migrations
                 {
                     b.HasOne("FranchiseGRPCService.Models.FranchiseModel", "franchiseId")
                         .WithMany("franchiseServices")
-                        .HasForeignKey("FranchiseId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("franchiseId");
-                });
-
-            modelBuilder.Entity("FranchiseGRPCService.Models.UserWishlistModel", b =>
-                {
-                    b.HasOne("FranchiseGRPCService.Models.FranchiseModel", "franchiseId")
-                        .WithMany()
                         .HasForeignKey("FranchiseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
