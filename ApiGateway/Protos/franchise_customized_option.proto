@@ -12,5 +12,4 @@ service FranchiseCustomizedOptionService {
 message FranchiseCustomizedOption {
   int32 franchise_customized_option_id = 1;
   string franchise_customize_option_name = 2;
-  int32 franchise_id = 3;
 }

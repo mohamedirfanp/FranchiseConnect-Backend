@@ -72,3 +72,18 @@ message FranchiseSocialModelResponse {
   string franchise_twitter = 5;
   string franchise_instagram = 6;
 }
+
+message FranchiseSelectedServiceRequest
+{
+	int32 franchise_customized_option_id = 1;
+	int32 franchise_provide_service_id = 2;
+	bool is_user_selected = 3;
+}
+
+message FranchiseSelectedServiceResponse
+{
+	int32 franchise_selected_service_id = 1;
+	int32 franchise_customized_option_id = 2;
+	int32 franchise_provide_service_id = 3;
+	bool is_user_selected = 4;
+}

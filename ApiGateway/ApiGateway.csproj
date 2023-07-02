@@ -34,9 +34,6 @@
     <None Update="Protos\authHandler.proto">
       <GrpcServices>Client</GrpcServices>
     </None>
-    <None Update="Protos\greet.proto">
-      <GrpcServices>Client</GrpcServices>
-    </None>
   </ItemGroup>
 
 	<ItemGroup>
@@ -50,6 +47,8 @@
 		<Protobuf Include="Protos\franchise_gallery.proto" GrpcServices="Client" />
 		<Protobuf Include="Protos\franchise_request.proto" GrpcServices="Client" />
 		<Protobuf Include="Protos\franchise_review.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\user_wishlist.proto" GrpcServices="Client" />
+		
 	</ItemGroup>
 
 </Project>

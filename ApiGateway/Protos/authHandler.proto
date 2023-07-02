@@ -12,6 +12,10 @@ service AuthenticationHandler {
   rpc SignUpUser (UserCreationRequest) returns (UserCreationResponse);
   // Sign In a User
   rpc SignInUser (AuthenticationRequest) returns (AuthenticationResponse);
+
+  // Change password
+  rpc ChangePassword(ChangePasswordResquest) returns (ChangePasswordResponse);
+
 }
 
 message UserSignUpDto {
@@ -48,3 +52,13 @@ message AuthenticationResponse
 	string jwtToken = 1;
 }
 
+message ChangePasswordResquest
+{
+	string oldPassword = 1;
+	string newPassword = 2;
+}
+
+message ChangePasswordResponse
+{
+	string response = 1;
+}

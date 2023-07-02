@@ -1,6 +1,8 @@
 ﻿using AccoutGRPCService.Protos;
+using ApiGateway.Services.AccountService;
 using Grpc.Core;
 using Grpc.Net.Client;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -11,61 +13,60 @@ namespace ApiGateway.Controllers
 	[ApiController]
 	public class AccoutController : ControllerBase
 	{
-		// GET: api/<AccoutController>
-		[HttpGet]
-		public IEnumerable<string> Get()
+        private readonly IAccountService _accountService;
+
+        public AccoutController(IAccountService accountService)
 		{
-			return new string[] { "value1", "value2" };
+			_accountService = accountService;
 		}
 
-		// GET api/<AccoutController>/5
-		[HttpGet("{id}")]
-		public string Get(int id)
+
+		// GET: api/<AccoutController>
+		[HttpGet, Authorize]
+		public GetProfileResponse Get()
 		{
-			return "value";
+			var response = _accountService.GetProfile();
+
+			return response;
 		}
 
 		// POST api/<AccoutController>
 		[HttpPost]
-		public void Post([FromBody] UserSignUpDto userRequest)
+		public IActionResult Post([FromBody] UserSignUpDto userRequest)
 		{
-			var channel = GrpcChannel.ForAddress("https://localhost:7212");
-			var client  = new AuthenticationHandler.AuthenticationHandlerClient(channel);
+			var response = _accountService.CreateUser(userRequest);
 
-			var response = client.SignUpUser(new UserCreationRequest
-			{
-				UserRequest = userRequest
-			});
+			return Ok(response);
 
-			Console.WriteLine(response);
-			Console.ReadLine();
-			channel.ShutdownAsync().Wait();
 		}
 
-		// PUT api/<AccoutController>/5
+		// Post User Login
 		[HttpPost("user/login")]
-		public void UserLogin([FromBody] UserSignInDto userSignInDto)
+		public IActionResult UserLogin([FromBody] UserSignInDto userSignInDto)
 		{
-			var channel = GrpcChannel.ForAddress("https://localhost:7212");
+			var response = _accountService.UserLogin(userSignInDto);
 
-			try
-			{
-				var client  = new AuthenticationHandler.AuthenticationHandlerClient(channel);
-				var response = client.SignInUser(new AuthenticationRequest { UserRequest = userSignInDto });    
-				Console.WriteLine(response);
-
-			}
-			catch(RpcException ex)
-			{
-				Console.WriteLine(ex.Message, ex.StatusCode);
-			}
-			channel.ShutdownAsync().Wait();
+			return Ok(response);
+			
 		}
 
-		// DELETE api/<AccoutController>/5
-		[HttpDelete("{id}")]
-		public void Delete(int id)
+		// Put to update user profile
+		[HttpPut, Authorize]
+		public IActionResult UpdateProfile([FromBody] UpdateUserRequest updateUserRequest)
 		{
+			var response = _accountService.UpdateProfile(updateUserRequest);
+
+			return Ok(response);
 		}
+
+		// Put to change password
+		[HttpPut, Authorize]
+		public IActionResult ChangePassword([FromBody] ChangePasswordResquest changePasswordRequest)
+		{
+			var response = _accountService.ChangePassword(changePasswordRequest);
+
+			return Ok(response);
+		}
+
 	}
 }
