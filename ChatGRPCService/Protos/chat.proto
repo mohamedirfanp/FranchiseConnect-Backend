@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+option csharp_namespace = "ChatGRPCService.Protos";
+
+package chatPackage;
+
+import "protos/chat_common.proto";
+import "google/protobuf/timestamp.proto";
+
+service ChatService
+{
+	rpc AddChatForConversation(AddChatForConversationRequest) returns (CommonResponse);
+	rpc GetChatsForConversation(CommonRequest) returns (GetChatsResponse);
+
+}
+
+message Chat
+{
+	int32 timeline_comment_id = 1;
+	string message = 2;
+	int32 from_id = 3;
+	string from_role = 4;
+	google.protobuf.Timestamp timestamp = 5;
+	int32 conversation_id = 6;
+}
+
+message GetChatsResponse
+{
+	repeated Chat getChats = 1;
+}
+
+message AddChatForConversationRequest
+{
+	string message = 1;
+	int32 from_id = 2;
+	int32 from_role = 3;
+	int32 conversation_id = 4;
+}

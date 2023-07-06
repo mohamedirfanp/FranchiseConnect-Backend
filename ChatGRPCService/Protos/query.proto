@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+option csharp_namespace = "ChatGRPCService.Protos";
+
+package chatPackage;
+
+import "protos/chat_common.proto";
+import "google/protobuf/empty.proto";
+import "google/protobuf/timestamp.proto";
+
+service QueryService
+{
+	rpc CreateQuery(CreateQueryRequest) returns (CommonResponse);
+	rpc GetTicketsForUser(CommonRequest) returns (GetTicketsResponse);
+	rpc GetTicketsForAdmin(google.protobuf.Empty) returns (GetTicketsResponse);
+	rpc CloseTicket(CommonRequest) returns (CommonResponse);
+}
+
+message Query
+{
+	int32 query_id = 7;
+	string query_title = 1;
+	string query_type = 2;
+	string query_description = 3;
+	google.protobuf.Timestamp created_at = 6;
+	int32 created_id = 4;
+	bool status = 5;
+}
+
+message CreateQueryRequest
+{
+	string query_title = 1;
+	string query_type = 2;
+	string query_description = 3;
+	int32 created_id = 4;
+}
+
+message GetTicketsResponse
+{
+	repeated Query tickets = 1;
+}
+
