@@ -4,6 +4,7 @@ using FranchiseGRPCService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FranchiseGRPCService.Migrations
 {
     [DbContext(typeof(FranchiseConnectContext))]
-    partial class FranchiseConnectContextModelSnapshot : ModelSnapshot
+    [Migration("20230706155914_request model changed to one-2-many")]
+    partial class requestmodelchangedtoone2many
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -219,7 +221,7 @@ namespace FranchiseGRPCService.Migrations
                     b.ToTable("FranchiseReview", "dbo");
                 });
 
-            modelBuilder.Entity("FranchiseGRPCService.Models.FranchiseSelectedServiceModel", b =>
+            modelBuilder.Entity("FranchiseGRPCService.Models.FranchiseSelectedService", b =>
                 {
                     b.Property<int>("FranchiseSelectedServiceId")
                         .ValueGeneratedOnAdd()
@@ -240,7 +242,7 @@ namespace FranchiseGRPCService.Migrations
 
                     b.HasIndex("FranchiseRequestId");
 
-                    b.ToTable("franchiseSelectedServiceModels");
+                    b.ToTable("FranchiseSelectedServiceModel");
                 });
 
             modelBuilder.Entity("FranchiseGRPCService.Models.FranchiseServiceModel", b =>
@@ -384,7 +386,7 @@ namespace FranchiseGRPCService.Migrations
                     b.Navigation("franchiseId");
                 });
 
-            modelBuilder.Entity("FranchiseGRPCService.Models.FranchiseSelectedServiceModel", b =>
+            modelBuilder.Entity("FranchiseGRPCService.Models.FranchiseSelectedService", b =>
                 {
                     b.HasOne("FranchiseGRPCService.Models.FranchiseRequestModel", "FranchiseRequest")
                         .WithMany("FranchiseSelectedServices")

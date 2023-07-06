@@ -4,6 +4,7 @@ using FranchiseGRPCService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FranchiseGRPCService.Migrations
 {
     [DbContext(typeof(FranchiseConnectContext))]
-    partial class FranchiseConnectContextModelSnapshot : ModelSnapshot
+    [Migration("20230706150731_added new field in the request model")]
+    partial class addednewfieldintherequestmodel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -182,7 +184,8 @@ namespace FranchiseGRPCService.Migrations
 
                     b.HasKey("FranchiseRequestId");
 
-                    b.HasIndex("FranchiseId");
+                    b.HasIndex("FranchiseId")
+                        .IsUnique();
 
                     b.ToTable("FranchiseRequestModel");
                 });
@@ -219,7 +222,7 @@ namespace FranchiseGRPCService.Migrations
                     b.ToTable("FranchiseReview", "dbo");
                 });
 
-            modelBuilder.Entity("FranchiseGRPCService.Models.FranchiseSelectedServiceModel", b =>
+            modelBuilder.Entity("FranchiseGRPCService.Models.FranchiseSelectedService", b =>
                 {
                     b.Property<int>("FranchiseSelectedServiceId")
                         .ValueGeneratedOnAdd()
@@ -240,7 +243,7 @@ namespace FranchiseGRPCService.Migrations
 
                     b.HasIndex("FranchiseRequestId");
 
-                    b.ToTable("franchiseSelectedServiceModels");
+                    b.ToTable("FranchiseSelectedServiceModel");
                 });
 
             modelBuilder.Entity("FranchiseGRPCService.Models.FranchiseServiceModel", b =>
@@ -365,8 +368,8 @@ namespace FranchiseGRPCService.Migrations
             modelBuilder.Entity("FranchiseGRPCService.Models.FranchiseRequestModel", b =>
                 {
                     b.HasOne("FranchiseGRPCService.Models.FranchiseModel", "franchiseId")
-                        .WithMany()
-                        .HasForeignKey("FranchiseId")
+                        .WithOne("franchiseRequestId")
+                        .HasForeignKey("FranchiseGRPCService.Models.FranchiseRequestModel", "FranchiseId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -384,7 +387,7 @@ namespace FranchiseGRPCService.Migrations
                     b.Navigation("franchiseId");
                 });
 
-            modelBuilder.Entity("FranchiseGRPCService.Models.FranchiseSelectedServiceModel", b =>
+            modelBuilder.Entity("FranchiseGRPCService.Models.FranchiseSelectedService", b =>
                 {
                     b.HasOne("FranchiseGRPCService.Models.FranchiseRequestModel", "FranchiseRequest")
                         .WithMany("FranchiseSelectedServices")
@@ -420,6 +423,9 @@ namespace FranchiseGRPCService.Migrations
             modelBuilder.Entity("FranchiseGRPCService.Models.FranchiseModel", b =>
                 {
                     b.Navigation("franchiseGallery");
+
+                    b.Navigation("franchiseRequestId")
+                        .IsRequired();
 
                     b.Navigation("franchiseReviews");
 
