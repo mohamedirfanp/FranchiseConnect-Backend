@@ -13,6 +13,9 @@ service AuthenticationHandler {
   // Sign In a User
   rpc SignInUser (AuthenticationRequest) returns (AuthenticationResponse);
 
+  // Sign In a Franchisor
+  rpc SignInFranchisor (AuthenticationRequest) returns (AuthenticationResponse);
+
   // Change password
   rpc ChangePassword(ChangePasswordResquest) returns (ChangePasswordResponse);
 

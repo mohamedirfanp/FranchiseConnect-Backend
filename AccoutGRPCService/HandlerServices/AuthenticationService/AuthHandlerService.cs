@@ -89,7 +89,8 @@ namespace AccoutGRPCService.HandlerServices.AuthenticationService
 
                 if (UserAlreadyExist(userCreationRequest.UserRequest.UserEmail))
                 {
-                    throw new RpcException(new Status(StatusCode.AlreadyExists, "User Already Exists"));
+                    //throw new RpcException(new Status(StatusCode.AlreadyExists, "User Already Exists"));
+                    throw new Exception($"User Already Exists.");
                 }
                 CreatePasswordHash(userCreationRequest.UserRequest.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
@@ -109,6 +110,7 @@ namespace AccoutGRPCService.HandlerServices.AuthenticationService
             }
             catch (Exception ex)
             {
+                
                 throw new RpcException(new Status(StatusCode.Unknown, ex.Message));
             }
 
@@ -121,15 +123,23 @@ namespace AccoutGRPCService.HandlerServices.AuthenticationService
             {
                 if (!UserAlreadyExist(authenticationRequest.UserRequest.Email))
                 {
-                    throw new RpcException(new Status(StatusCode.InvalidArgument, $"{authenticationRequest.UserRequest.Email} is invalid."));
+                    //throw new RpcException(new Status(StatusCode.InvalidArgument, $"{authenticationRequest.UserRequest.Email} is invalid."));
+                    throw new Exception($"{authenticationRequest.UserRequest.Email} is invalid.");
                     //return new BadRequestObjectResult($"{authenticationRequest.UserRequest.Email} is invalid.");
                 }
 
-                var user = _context.User.FirstOrDefault(user => user.UserEmail == authenticationRequest.UserRequest.Email);
+                var user = _context.User.FirstOrDefault(user => (user.UserEmail == authenticationRequest.UserRequest.Email && user.UserRole == "Franchisee") );
+
+                if (user == null)
+                {
+
+                    throw new Exception("No User Found");
+                }
 
                 if (!VerifyPasswordHash(authenticationRequest.UserRequest.Password, user.PasswordHash, user.PasswordSalt))
                 {
-                    throw new RpcException(new Status(StatusCode.InvalidArgument,"Invalid Password"));
+                    //throw new RpcException(new Status(StatusCode.InvalidArgument,"Invalid Password"));
+                    throw new Exception($"Invalid Password");
                 }
 
                 string jwtToken = "";
@@ -147,6 +157,47 @@ namespace AccoutGRPCService.HandlerServices.AuthenticationService
                 throw new RpcException(new Status(StatusCode.Unknown, ex.Message));
             }
 
+        }
+
+        public AuthenticationResponse AuthenticateFranchisor(AuthenticationRequest authenticationRequest)
+        {
+            try
+            {
+                if (!UserAlreadyExist(authenticationRequest.UserRequest.Email))
+                {
+                    //throw new RpcException(new Status(StatusCode.InvalidArgument, $"{authenticationRequest.UserRequest.Email} is invalid."));
+                    throw new Exception($"{authenticationRequest.UserRequest.Email} is invalid.");
+                    //return new BadRequestObjectResult($"{authenticationRequest.UserRequest.Email} is invalid.");
+                }
+
+                var user = _context.User.FirstOrDefault(user => (user.UserEmail == authenticationRequest.UserRequest.Email && user.UserRole == "Franchisor"));
+               Console.WriteLine("HERERE " + user);
+                if(user == null)
+                {
+
+                    throw new Exception("No User Found");
+                }
+
+                if (!VerifyPasswordHash(authenticationRequest.UserRequest.Password, user.PasswordHash, user.PasswordSalt))
+                {
+                    //throw new RpcException(new Status(StatusCode.InvalidArgument,"Invalid Password"));
+                    throw new Exception($"Invalid Password");
+                }
+
+                string jwtToken = "";
+
+
+                jwtToken = CreateToken(user.UserId.ToString(), user.UserRole);
+
+                return new AuthenticationResponse
+                {
+                    JwtToken = jwtToken,
+                };
+            }
+            catch (Exception ex)
+            {
+                throw new RpcException(new Status(StatusCode.Unknown, ex.Message));
+            }
         }
 
         // A function to Change Password 
@@ -183,5 +234,6 @@ namespace AccoutGRPCService.HandlerServices.AuthenticationService
 
         }
 
+        
     }
 }

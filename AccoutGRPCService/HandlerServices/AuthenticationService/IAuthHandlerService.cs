@@ -11,6 +11,11 @@ namespace AccoutGRPCService.HandlerServices.AuthenticationService
         // User Sign In
         AuthenticationResponse AuthenticateUser(AuthenticationRequest authenticationRequest);
 
+        // Franchisor Sign In
+        AuthenticationResponse AuthenticateFranchisor(AuthenticationRequest authenticationRequest);
+
+
+
         // To Change Password
         ChangePasswordResponse ChangePassword(ChangePasswordResquest changePasswordRequest);
     }

@@ -33,6 +33,13 @@ namespace AccoutGRPCService.Services
             return Task.FromResult(response);
         }
 
+        public override Task<AuthenticationResponse> SignInFranchisor(AuthenticationRequest request, ServerCallContext context)
+        {
+            var response = _authService.AuthenticateFranchisor(request);
+
+            return Task.FromResult(response);
+        }
+
         [Authorize]
         public override Task<ChangePasswordResponse> ChangePassword(ChangePasswordResquest request, ServerCallContext context)
         {

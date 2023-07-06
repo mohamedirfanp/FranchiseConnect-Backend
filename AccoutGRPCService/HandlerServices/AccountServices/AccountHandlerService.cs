@@ -52,6 +52,7 @@ namespace AccoutGRPCService.HandlerServices.AccountServices
 			catch (Exception ex)
 			{
                 throw new RpcException(new Status(StatusCode.Unknown, ex.Message));
+
             }
 		}
 
