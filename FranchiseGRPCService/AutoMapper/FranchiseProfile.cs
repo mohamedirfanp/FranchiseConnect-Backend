@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using FranchiseGRPCService.Models;
+using Google.Protobuf.WellKnownTypes;
 
 namespace FranchiseGRPCService.AutoMapper
 {
@@ -23,6 +24,23 @@ namespace FranchiseGRPCService.AutoMapper
             .ForMember(dest => dest.FranchiseViewCount, opt => opt.MapFrom(src => src.FranchiseViewCount))
             // Map other properties as needed
             .ReverseMap(); // Optionally, configure reverse mapping
+
+
+            CreateMap<FranchiseRequestModel, Franchise.FranchiseRequestModel>()
+             .ForMember(dest => dest.FranchiseRequestId, opt => opt.MapFrom(src => src.FranchiseRequestId))
+             .ForMember(dest => dest.FranchiseSampleBoxOption, opt => opt.MapFrom(src => src.FranchiseSampleBoxOption))
+             .ForMember(dest => dest.FranchiseCustomizedOption, opt => opt.MapFrom(src => src.FranchiseCustomizedOption))
+             .ForMember(dest => dest.OwnerId, opt => opt.MapFrom(src => src.ownerId))
+             .ForMember(dest => dest.CreatedId, opt => opt.MapFrom(src => src.CreatedId))
+             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => Timestamp.FromDateTime(src.CreatedAt)))
+             .ForMember(dest => dest.IsRequestStatus, opt => opt.MapFrom(src => src.IsRequestStatus))
+             .ForMember(dest => dest.FranchiseId, opt => opt.MapFrom(src => src.FranchiseId));
+
+
+
         }
+
+            
+
     }
 }
