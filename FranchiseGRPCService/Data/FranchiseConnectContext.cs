@@ -15,8 +15,10 @@ namespace FranchiseGRPCService.Data
         public DbSet<FranchiseReviewModel> FranchiseReviewModel { get; set; } = default!;
         public DbSet<FranchiseServiceModel> FranchiseServiceModel { get; set; } = default!;
         public DbSet<FranchiseSocialModel> FranchiseSocialModel { get; set; } = default!;
-        public DbSet<FranchiseCustomizedOptionModel> FranchiseCustomizedOptionModel { get; set; } = default!;
-        public DbSet<FranchiseSelectedService> FranchiseSelectedServiceModel { get; set; } = default!;
+        //public DbSet<FranchiseCustomizedOptionModel> FranchiseCustomizedOptionModel { get; set; } = default!;
+        //public DbSet<FranchiseSelectedService> FranchiseSelectedServiceModel { get; set; } = default!;
+
+        public DbSet<FranchiseSelectedServiceModel> franchiseSelectedServiceModels { get; set; } = default!;
 
         public DbSet<UserWishlistModel> UserWishlistModel { get; set; } = default!;
 
@@ -39,14 +41,29 @@ namespace FranchiseGRPCService.Data
                 .WithOne(franchiseId => franchiseId.franchiseId)
                 .HasForeignKey(franchiseId => franchiseId.FranchiseId);
 
-            modelBuilder.Entity<FranchiseCustomizedOptionModel>()
-                .HasMany(franchiseSelectedService => franchiseSelectedService.FranchiseSelectedServices)
-                .WithOne(franchiseCustom => franchiseCustom.FranchiseCustomizedOption)
-                .HasForeignKey(franchiseCustom => franchiseCustom.FranchiseSelectedServiceId);
+            /* modelBuilder.Entity<FranchiseCustomizedOptionModel>()
+                 .HasMany(franchiseSelectedService => franchiseSelectedService.FranchiseSelectedServices)
+                 .WithOne(franchiseCustom => franchiseCustom.FranchiseCustomizedOption)
+                 .HasForeignKey(franchiseCustom => franchiseCustom.FranchiseSelectedServiceId);*/
 
 
+            modelBuilder.Entity<FranchiseRequestModel>()
+                .HasMany(frequest => frequest.FranchiseSelectedServices)
+                .WithOne(fid => fid.FranchiseRequest)
+                .HasForeignKey(frequest => frequest.FranchiseRequestId);
 
-            
+            //   modelBuilder.Entity<FranchiseModel>()
+            //.HasOne(franchise => franchise.franchiseRequestId)
+            //.WithOne(request => request.Franchise)
+            //.HasForeignKey<FranchiseRequestModel>(request => request.FranchiseId);
+
+            modelBuilder.Entity<FranchiseSelectedServiceModel>()
+       .HasOne(fss => fss.FranchiseServiceId)
+       .WithMany()
+       .HasForeignKey(fss => fss.FranchiseProvideServiceId)
+       .OnDelete(DeleteBehavior.NoAction);
+
+
 
         }
 
