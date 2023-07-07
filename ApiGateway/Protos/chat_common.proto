@@ -1,0 +1,26 @@
+syntax = "proto3";
+
+
+package chatPackage;
+
+message CommonRequest
+{
+	int32 request_id = 1;
+}
+
+message Conversation
+{
+	int32 conversation_id = 1;
+	int32 franchisee_id = 2;
+	int32 franchisor_id = 3;
+	string franchisee_name = 5;
+	string franchisor_franchise_name = 6;
+	bool is_blocked = 4;
+
+}
+
+message CommonResponse
+{
+	string response = 1;
+}
+

@@ -10,7 +10,22 @@ service FranchiseService {
   rpc CreateFranchise(CreateFranchiseRequest) returns (CreateFranchiseResponse);
   rpc GetAllFranchise(google.protobuf.Empty) returns (GetFranchiseResponse); 
   rpc GetFranchiseById(GetFranchiseByIdRequest) returns (GetFranchisesRespsonse);
+
+  rpc FranchiseExist(FranchiseExistRequest) returns (FranchiseExistResponse);
+  rpc IncreseViewCount(IncreseViewCountRequest) returns (IncreseViewCountResponse);
+
 }
+
+message FranchiseExistRequest
+{
+	int32 user_id = 1;
+}
+
+message FranchiseExistResponse
+{
+	bool franchise_exist = 1;
+}
+
 
 message GetFranchiseByIdRequest
 {
@@ -49,6 +64,16 @@ message GetFranchiseResponse
 }
 
 message CreateFranchiseResponse
+{
+	string response = 1;
+}
+
+message IncreseViewCountRequest
+{
+	int32 franchiseId = 1;
+}
+
+message IncreseViewCountResponse
 {
 	string response = 1;
 }

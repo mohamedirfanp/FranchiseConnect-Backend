@@ -2,13 +2,14 @@ syntax = "proto3";
 
 package franchise;
 
-
+import "protos/franchise_common.proto";
 import "google/protobuf/any.proto";
 
 service FranchiseRequestService {
   rpc CreateFranchiseRequest(CreateFranchiseUserRequest) returns (FranchiseUserResponse);
   rpc GetFranchiseRequest(GetFranchiseRequestByUserID) returns (FranchiseRequestResponseList);
   rpc UpdateStatus(UpdateStatusRequest) returns (FranchiseUserResponse);
+  rpc GetFranchiseRequests(GetFranchiseRequestByUserID) returns (FranchiseRequestResponseList);
   //rpc DeleteFranchiseRequest(FranchiseRequest) returns (FranchiseRequest);
 }
 
@@ -17,13 +18,21 @@ message GetFranchiseRequestByUserID
 	int32 user_id = 1;
 }
 
+message CreateFranchiseRequestFrontend
+{
+	int32 franchise_id = 2;
+	repeated int32 services_id = 1;
+	int32 owner_id = 3;
+}
+
+
+
 message CreateFranchiseUserRequest
 {
 	int32 franchise_id = 2;
-	bool franchise_sample_box_option = 3;
-	bool franchise_customization_option = 1;
-	int32 franhise_customization_id = 4;
+	repeated int32 services_id = 1;
 	int32 owner_id = 5;
+	int32 user_id = 3;
 }
 
 message FranchiseUserResponse
@@ -31,10 +40,6 @@ message FranchiseUserResponse
 	string response = 1;
 }
 
-message FranchiseRequestResponse {
-  google.protobuf.Any franchiseRequest = 1;
-  repeated google.protobuf.Any franchiseCustomization = 2;
-}
 
 message FranchiseRequestResponseList {
   repeated FranchiseRequestResponse responses = 1;
