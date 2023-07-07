@@ -2,6 +2,8 @@ syntax = "proto3";
 
 package franchise;
 
+import "google/protobuf/timestamp.proto";
+
 message Franchise {
   int32  franchise_id = 1;
   string franchise_name = 2;
@@ -45,6 +47,7 @@ message FranchiseRequest
 message FranchiseServiceModelRequest {
   string franchise_provide_service_name = 2;
   string franchise_provide_service_description = 1;
+    bool franchise_customization_allowed = 3;
 }
 
 message FranchiseServiceModelResponse
@@ -52,6 +55,7 @@ message FranchiseServiceModelResponse
 	int32 franchise_service_id = 1;
 	string franchise_provide_service_name = 2;
 	string franchise_provide_service_description = 4;
+	bool franchise_customization_status = 5;
 	int32 franchise_id = 3;
 }
 
@@ -83,7 +87,28 @@ message FranchiseSelectedServiceRequest
 message FranchiseSelectedServiceResponse
 {
 	int32 franchise_selected_service_id = 1;
-	int32 franchise_customized_option_id = 2;
 	int32 franchise_provide_service_id = 3;
-	bool is_user_selected = 4;
+	int32 request_id = 2;
+}
+
+
+message FranchiseRequestModel
+{
+	int32 franchise_request_id = 1;
+	 bool franchise_sample_box_option = 2;
+	 bool franchise_customized_option = 3;
+	int32 owner_id = 4;
+	int32 created_id = 5;
+	 google.protobuf.Timestamp created_at = 6;
+	 string is_request_status = 7;
+	 int32 franchise_id = 8;
+}
+
+message FranchiseRequestResponse
+{
+	FranchiseRequestModel franchise_request = 1;
+	Franchise franchise = 2;
+	repeated FranchiseGalleryResponse franchiseGalleryList = 3;
+	repeated FranchiseServiceModelResponse frachiseServiceList = 4;
+	repeated FranchiseSelectedServiceResponse franchiseSelectedServiceList = 5;
 }

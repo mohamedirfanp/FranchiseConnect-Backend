@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿    using AutoMapper;
 using Franchise;
 using FranchiseGRPCService.Data;
 using FranchiseGRPCService.Models;

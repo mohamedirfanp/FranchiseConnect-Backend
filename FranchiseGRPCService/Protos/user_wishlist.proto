@@ -20,6 +20,12 @@ message AddUserWishListRequest
 	
 }
 
+message CommonRequest
+{
+	int32 franchiseId = 1;
+}
+
+
 message RemoveUserWishListRequest
 {
 	int32 user_wishlist_id = 1;
@@ -39,6 +45,7 @@ message UserWishList
 {
 	Franchise franchise = 1;
 	int32 user_id = 2;
+	int32 wishlist_id = 3;
 }
 
 message GetUserWishListResponse

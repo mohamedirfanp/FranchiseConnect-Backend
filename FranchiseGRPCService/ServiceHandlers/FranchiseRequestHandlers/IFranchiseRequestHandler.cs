@@ -11,10 +11,10 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseRequestHandlers
 
         FranchiseRequestResponseList GetFranchiseRequest(GetFranchiseRequestByUserID userID);
 
+        FranchiseRequestResponseList GetFranchiseAllRequest(GetFranchiseRequestByUserID userID);
+
 
         FranchiseUserResponse UpdateRequestStatus(UpdateStatusRequest updateStatusRequest);
-
-
 
     }
 }
