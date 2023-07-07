@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Franchise;
 using ApiGateway.Dto_Models;
 using ApiGateway.Services.FranchiseService;
+using Microsoft.AspNetCore.Authorization;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -22,7 +23,7 @@ namespace ApiGateway.Controllers
 		}
 
 		// GET: api/<FranchiseController>
-		[HttpGet]
+		[HttpGet, Authorize]
 		public GetFranchiseResponse Get()
 		{
 			var response = _franchiseService.GetAllFranchise();
@@ -32,7 +33,7 @@ namespace ApiGateway.Controllers
 		}
 
 		// GET api/<FranchiseController>/5
-		[HttpGet("{id}")]
+		[HttpGet("{id}"), Authorize]
 		public GetFranchisesRespsonse Get(int id)
 		{
 			var response = _franchiseService.GetFranchiseById(id);
@@ -41,7 +42,7 @@ namespace ApiGateway.Controllers
 		}
 
 		// POST api/<FranchiseController>
-		[HttpPost]
+		[HttpPost, Authorize(Roles="Franchisor")]
 		public CreateFranchiseResponse Post([FromBody] CreateFranchiseDto request)
 		{
 			var response = _franchiseService.CreateFranchise(request);
@@ -49,6 +50,24 @@ namespace ApiGateway.Controllers
 			return response;
 
 		}
+
+		// Get Franchise Exist Status
+		[HttpGet("franchise-exist"), Authorize(Roles="Franchisor")]
+		public FranchiseExistResponse GetExist()
+		{
+			var response = _franchiseService.GetFranchiseExist();
+
+			return response;
+		}
+
+		// Put - Increment Franchise View Count
+		[HttpPut("update-viewcount"), Authorize]
+		public IncreseViewCountResponse UpdateViewCount([FromBody] IncreseViewCountRequest request)
+		{
+            var response = _franchiseService.IncrementViewCount(request);
+
+            return response;
+        }
 
 
 		/// Franchise Gallery Endpoints
@@ -114,9 +133,10 @@ namespace ApiGateway.Controllers
 		/* Franchise Request Service Endpoints */
 
 		// Create a User franchise request
-		[HttpPost("request/create")]
-		public IActionResult CreateUserRequest([FromBody] CreateFranchiseUserRequest createFranchiseUserRequest)
+		[HttpPost("request"), Authorize(Roles = "Franchisee")]
+		public IActionResult CreateUserRequest([FromBody] CreateRequestDto createFranchiseUserRequest)
 		{
+
 			var response = _franchiseService.CreateUserRequest(createFranchiseUserRequest);
 
 
@@ -128,8 +148,9 @@ namespace ApiGateway.Controllers
 			return Ok(response);
 		}
 
-		// Get all franchise Request for franchisor
-		[HttpGet("request/get")]
+		// Get all franchise Pending Request for franchisor
+		[HttpGet("pending-request"), Authorize(Roles = "Franchisor")]
+
 		public FranchiseRequestResponseList GetAllFranchiseUserRequest()
 		{
 			var response = _franchiseService.GetAllFranchiseRequest();
@@ -137,8 +158,18 @@ namespace ApiGateway.Controllers
 			return response;
 		}
 
-		// To Update a franchise Request Status
-		[HttpPut("request/update")]
+		// Get all franchise request for franchisor
+		[HttpGet("request"), Authorize]
+		public FranchiseRequestResponseList GetAllFranchiseRequest()
+		{
+            var response = _franchiseService.GetAllFranchiseRequests();
+
+            return response;
+        }
+
+
+        // To Update a franchise Request Status
+        [HttpPut("request"), Authorize(Roles = "Franchisor")]
 		public IActionResult UpdateUserRequestStatus([FromBody] UpdateStatusRequest statusRequest)
 		{
             var response = _franchiseService.UpdateRequestStatus(statusRequest);
@@ -156,10 +187,10 @@ namespace ApiGateway.Controllers
 		/* User Wishlist Service Endpoints */
 
 		// Add a User wishlist
-		[HttpPost("user-wishlist/add")]
-		public IActionResult AddWishlist([FromBody] AddUserWishListRequest userWishListRequest)
+		[HttpPut("user-wishlist"), Authorize(Roles ="Franchisee")]
+		public IActionResult AddWishlist([FromBody] CommonRequest franchiseId)
 		{
-            var response = _franchiseService.AddUserWishlist(userWishListRequest);
+            var response = _franchiseService.AddUserWishlist(franchiseId);
 
 
             if (response is BadRequestObjectResult badRequest)
@@ -170,15 +201,15 @@ namespace ApiGateway.Controllers
             return Ok(response);
         }
 
-		[HttpGet("user-wishlist/get")]
-		public GetUserWishListResponse GetUserWishlistList(GetUserWishListRequest wishListRequest)
+		[HttpGet("user-wishlist"), Authorize(Roles = "Franchisee")]
+		public GetUserWishListResponse GetUserWishlistList()
 		{
-			var response = _franchiseService.GetAllWishlist(wishListRequest);
+			var response = _franchiseService.GetAllWishlist();
 
 			return response;
 		}
 
-		[HttpDelete("user-wishlist/remove")]
+		[HttpDelete("user-wishlist"), Authorize(Roles = "Franchisee")]
 		public IActionResult RemoveWishList(RemoveUserWishListRequest removeUserWishRequest)
 		{
             var response = _franchiseService.RemoveUserWishlist(removeUserWishRequest);
