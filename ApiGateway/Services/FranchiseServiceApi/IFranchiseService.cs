@@ -16,6 +16,13 @@ namespace ApiGateway.Services.FranchiseService
         // Create a Franchise
         CreateFranchiseResponse CreateFranchise(CreateFranchiseDto request);
 
+        // Franchise Exist or not
+        FranchiseExistResponse GetFranchiseExist();
+
+
+        // Incrementing View Count
+        IncreseViewCountResponse IncrementViewCount(IncreseViewCountRequest request);
+
 
         /* Franchise Gallery */
         // Upload new Photo 
@@ -36,10 +43,13 @@ namespace ApiGateway.Services.FranchiseService
         /* Franchise Request Service */
 
         // Create a User Request for franchisee
-        IActionResult CreateUserRequest(CreateFranchiseUserRequest franchiseUserRequest);
+        IActionResult CreateUserRequest(CreateRequestDto franchiseUserRequest);
 
-        // Get All the request for franchisor
+        // Get All the Pending request for franchisor
         FranchiseRequestResponseList GetAllFranchiseRequest();
+
+        // Get All the Requests for franchisor
+        FranchiseRequestResponseList GetAllFranchiseRequests();
 
         // Update a Status of request from franchisor
         IActionResult UpdateRequestStatus(UpdateStatusRequest statusRequest);
@@ -48,10 +58,10 @@ namespace ApiGateway.Services.FranchiseService
         /* User Wishlist Service */
 
         // Add a new wishlist
-        IActionResult AddUserWishlist(AddUserWishListRequest userWishListRequest);
+        IActionResult AddUserWishlist(CommonRequest userRequest);
 
         // Get all wishlist for franchisee
-        GetUserWishListResponse GetAllWishlist(GetUserWishListRequest wishListRequest);
+        GetUserWishListResponse GetAllWishlist();
 
         // Remove a wishlist
         IActionResult RemoveUserWishlist(RemoveUserWishListRequest removeUserWishRequest);

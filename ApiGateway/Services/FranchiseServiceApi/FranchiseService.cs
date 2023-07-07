@@ -43,12 +43,21 @@ namespace ApiGateway.Services.FranchiseService
 						FranchiseIndustry = request.Franchise.FranchiseIndustry,
 						FranchiseInvestment = request.Franchise.FranchiseInvestment,
 						FranchisePreferredExpansionLocation = request.Franchise.FranchisePreferredExpansionLocation,
-						FranchiseSegment = request.Franchise.FranchiseSpace,
+						FranchiseSegment = request.Franchise.FranchiseSegment,
 						FranchiseSpace = request.Franchise.FranchiseSpace,
-						FranchiseSampleBoxOption = request.Franchise.FranchiseSampleBoxOption,
-						FranchiseViewCount = request.Franchise.FranchiseViewCount
+						FranchiseSampleBoxOption = false,
+						FranchiseViewCount = 0,
+                        FranchiseOwnerId = GetCurrentUserId()
+                        
 					},
-					FrachiseSocial = request.FranchiseSocialRequest
+					FrachiseSocial = new FranchiseSocialModelRequest()
+                    {
+                        FranchiseEmail = request.FranchiseSocialRequest.FranchiseEmail,
+                        FranchiseFacebook = request.FranchiseSocialRequest.FranchiseFacebook,
+                        FranchiseInstagram = request.FranchiseSocialRequest.FranchiseInstagram,
+                        FranchiseTwitter = request.FranchiseSocialRequest.FranchiseTwitter,
+                        FranchiseWebsite = request.FranchiseSocialRequest.FranchiseWebsite
+                    }
 				};
 
 				foreach (var gallery in request.GalleryRequestList)
@@ -184,11 +193,20 @@ namespace ApiGateway.Services.FranchiseService
         }
 
         // Franchise Request Service
-        public IActionResult CreateUserRequest(CreateFranchiseUserRequest franchiseUserRequest)
+        public IActionResult CreateUserRequest(CreateRequestDto franchiseUserRequest)
         {
             try
             {
-                var response = _grpcClients.FranchiseRequestClient.CreateFranchiseRequest(franchiseUserRequest);
+                CreateFranchiseUserRequest userRequest = new CreateFranchiseUserRequest()
+                {
+                    FranchiseId = franchiseUserRequest.FranchiseId,
+                    OwnerId = franchiseUserRequest.OwnerId,
+                    UserId = GetCurrentUserId(),
+                };
+                userRequest.ServicesId.Add(franchiseUserRequest.ServicesId);
+
+
+                var response = _grpcClients.FranchiseRequestClient.CreateFranchiseRequest(userRequest);
                 return new OkObjectResult(response);
 
             }
@@ -198,6 +216,7 @@ namespace ApiGateway.Services.FranchiseService
             }
         }
 
+        // To get pending requests
         public FranchiseRequestResponseList GetAllFranchiseRequest()
         {
             try
@@ -216,6 +235,26 @@ namespace ApiGateway.Services.FranchiseService
             }
         }
 
+
+        public FranchiseRequestResponseList GetAllFranchiseRequests()
+        {
+            try
+            {
+                var response = _grpcClients.FranchiseRequestClient.GetFranchiseRequests(new GetFranchiseRequestByUserID
+                {
+                    UserId = GetCurrentUserId()
+                });
+
+                return response;
+
+            }
+            catch (RpcException ex)
+            {
+                throw new RpcException(new Status(StatusCode.Unknown, ex.Message));
+            }
+        }
+
+
         public IActionResult UpdateRequestStatus(UpdateStatusRequest statusRequest)
         {
             try
@@ -231,11 +270,15 @@ namespace ApiGateway.Services.FranchiseService
         }
 
         // User Wishlist Service
-        public IActionResult AddUserWishlist(AddUserWishListRequest userWishListRequest)
+        public IActionResult AddUserWishlist(CommonRequest request)
         {
             try
             {
-                var response = _grpcClients.UserWishListServiceClient.AddUserWishList(userWishListRequest); 
+                var response = _grpcClients.UserWishListServiceClient.AddUserWishList(new AddUserWishListRequest()
+                {
+                    FranchiseId = request.FranchiseId,
+                    UserId = GetCurrentUserId()
+                }); 
                 return new OkObjectResult(response);
             }
             catch(RpcException ex)
@@ -244,11 +287,11 @@ namespace ApiGateway.Services.FranchiseService
             }
         }
 
-        public GetUserWishListResponse GetAllWishlist(GetUserWishListRequest wishListRequest)
+        public GetUserWishListResponse GetAllWishlist()
         {
             try
             {
-                var response = _grpcClients.UserWishListServiceClient.GetUserWishList(wishListRequest);
+                var response = _grpcClients.UserWishListServiceClient.GetUserWishList(new GetUserWishListRequest { UserId = GetCurrentUserId()});
 
                 return response;
             }
@@ -270,5 +313,38 @@ namespace ApiGateway.Services.FranchiseService
                 return new BadRequestObjectResult(ex.Message);
             }
         }
+
+        public FranchiseExistResponse GetFranchiseExist()
+        {
+            try
+            {
+                var response = _grpcClients.FranchiseClient.FranchiseExist(new FranchiseExistRequest()
+                {
+                    UserId = GetCurrentUserId(),
+                });
+
+                return response;
+            }
+            catch(RpcException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public IncreseViewCountResponse IncrementViewCount(IncreseViewCountRequest request)
+        {
+            try
+            {
+                var response = _grpcClients.FranchiseClient.IncreseViewCount(request);
+
+                return response;
+            }
+            catch (RpcException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+
     }
 }
