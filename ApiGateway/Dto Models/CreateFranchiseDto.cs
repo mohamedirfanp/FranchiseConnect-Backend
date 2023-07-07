@@ -10,10 +10,11 @@ namespace ApiGateway.Dto_Models
 
         public List<string> GalleryRequestList { get; set; }
 
-        public List<CreateFranchiseServiceRequest> FranchiseServiceRequestsList { get; set; }
+        public List<FranchiseServiceModelRequest> FranchiseServiceRequestsList { get; set; }
 
         public FranchiseSocialModelRequest FranchiseSocialRequest { get; set; }
 
 
     }
+    
 }
