@@ -41,5 +41,13 @@ namespace FranchiseGRPCService.Services
 
             return Task.FromResult(response);
         }
+
+        public override Task<FranchiseRequestResponseList> GetFranchiseRequests(GetFranchiseRequestByUserID request, ServerCallContext context)
+        {
+            var response = _franchiseRequestHandler.GetFranchiseAllRequest(request);
+
+            return Task.FromResult(response);
+        }
+
     }
 }
