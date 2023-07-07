@@ -32,7 +32,7 @@ namespace FranchiseGRPCService.AutoMapper
              .ForMember(dest => dest.FranchiseCustomizedOption, opt => opt.MapFrom(src => src.FranchiseCustomizedOption))
              .ForMember(dest => dest.OwnerId, opt => opt.MapFrom(src => src.ownerId))
              .ForMember(dest => dest.CreatedId, opt => opt.MapFrom(src => src.CreatedId))
-             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => Timestamp.FromDateTime(src.CreatedAt)))
+             .ForMember(dest => dest.CreatedAt, opt => opt.MapFrom(src => Timestamp.FromDateTime(src.CreatedAt.ToUniversalTime())))
              .ForMember(dest => dest.IsRequestStatus, opt => opt.MapFrom(src => src.IsRequestStatus))
              .ForMember(dest => dest.FranchiseId, opt => opt.MapFrom(src => src.FranchiseId));
 
