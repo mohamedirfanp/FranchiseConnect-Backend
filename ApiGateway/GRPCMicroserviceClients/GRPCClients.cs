@@ -1,4 +1,5 @@
 ﻿using AccoutGRPCService.Protos;
+using ChatGRPCService.Protos;
 using Franchise;
 using FranchiseGRPCService.Protos;
 using Grpc.Net.Client;
@@ -18,8 +19,16 @@ namespace ApiGateway.GRPCMicroserviceClients
             FranchiseGalleryClient = new FranchiseGalleryService.FranchiseGalleryServiceClient(franchiseGPRCServiceChannel);
             FranchiseProvideServiceClient = new FranchiseServiceService.FranchiseServiceServiceClient(franchiseGPRCServiceChannel);
             FranchiseRequestClient = new FranchiseRequestService.FranchiseRequestServiceClient(franchiseGPRCServiceChannel);
-
             UserWishListServiceClient = new UserWishListService.UserWishListServiceClient(franchiseGPRCServiceChannel);
+
+            var chatGRPCServiceChannel = GrpcChannel.ForAddress("https://localhost:7291");
+
+            ConversationServiceClient = new ConversationService.ConversationServiceClient(chatGRPCServiceChannel);
+
+            QueryServiceClient = new QueryService.QueryServiceClient(chatGRPCServiceChannel);
+
+            ChatServiceClient = new ChatService.ChatServiceClient(chatGRPCServiceChannel);
+
         }
 
         public AuthenticationHandler.AuthenticationHandlerClient AuthClient { get; }
@@ -28,7 +37,10 @@ namespace ApiGateway.GRPCMicroserviceClients
         public FranchiseGalleryService.FranchiseGalleryServiceClient FranchiseGalleryClient { get; }
         public FranchiseServiceService.FranchiseServiceServiceClient FranchiseProvideServiceClient { get; }
         public FranchiseRequestService.FranchiseRequestServiceClient FranchiseRequestClient { get; }
-
         public UserWishListService.UserWishListServiceClient UserWishListServiceClient { get; }
+        public ChatService.ChatServiceClient ChatServiceClient { get; }
+        public ConversationService.ConversationServiceClient ConversationServiceClient { get; }
+        public QueryService.QueryServiceClient QueryServiceClient { get; }
+
     }
 }

@@ -1,4 +1,5 @@
 ﻿using AccoutGRPCService.Protos;
+using ChatGRPCService.Protos;
 using Franchise;
 using FranchiseGRPCService.Protos;
 
@@ -14,5 +15,13 @@ namespace ApiGateway.GRPCMicroserviceClients
         FranchiseRequestService.FranchiseRequestServiceClient FranchiseRequestClient { get; }
 
         UserWishListService.UserWishListServiceClient UserWishListServiceClient { get; }
+
+        ConversationService.ConversationServiceClient ConversationServiceClient { get; }
+
+        QueryService.QueryServiceClient QueryServiceClient { get; }
+
+        ChatService.ChatServiceClient ChatServiceClient { get; }
+
+        
     }
 }
