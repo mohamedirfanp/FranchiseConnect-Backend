@@ -48,7 +48,10 @@
 		<Protobuf Include="Protos\franchise_request.proto" GrpcServices="Client" />
 		<Protobuf Include="Protos\franchise_review.proto" GrpcServices="Client" />
 		<Protobuf Include="Protos\user_wishlist.proto" GrpcServices="Client" />
-		
+		<Protobuf Include="Protos\chat_common.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\conversation.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\chat.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\query.proto" GrpcServices="Client" />
 	</ItemGroup>
 
 </Project>
