@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Humanizer;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace FranchiseGRPCService.Models
 {
-    public class FranchiseSelectedService
+    public class FranchiseSelectedServiceModel
     {
 
         [Key]
@@ -15,6 +17,8 @@ namespace FranchiseGRPCService.Models
 
         [Column("franchise_provide_service_id")]
         [ForeignKey("FranchiseServiceId")]
+    
+           
         public int FranchiseProvideServiceId { get; set; }
 
 
@@ -37,7 +41,5 @@ namespace FranchiseGRPCService.Models
         //public virtual FranchiseCustomizedOptionModel FranchiseCustomizedOption { get; set; }
 
         public virtual FranchiseRequestModel FranchiseRequest { get; set; }
-
-
     }
 }

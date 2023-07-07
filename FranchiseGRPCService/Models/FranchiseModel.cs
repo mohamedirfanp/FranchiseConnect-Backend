@@ -27,7 +27,6 @@ namespace FranchiseGRPCService.Models
             public string FranchiseSegment { get; set; }
 
             [Required]
-            [StringLength(250)]
             [Column("franchise_about")]
             public string FranchiseAbout { get; set; }
 
@@ -82,7 +81,7 @@ namespace FranchiseGRPCService.Models
 
             public virtual FranchiseSocialModel franchiseSocialId { get; set; }
 
-            public virtual FranchiseRequestModel franchiseRequestId { get; set; }
+            //public virtual FranchiseRequestModel franchiseRequestId { get; set; }
 
             public virtual ICollection<FranchiseServiceModel> franchiseServices { get; set; }
 

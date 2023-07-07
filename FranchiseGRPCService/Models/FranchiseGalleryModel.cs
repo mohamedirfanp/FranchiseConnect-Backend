@@ -13,7 +13,7 @@ namespace FranchiseGRPCService.Models
 
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Column("franchise_photo_url")]
-        [StringLength(100)]
+        [StringLength(500)]
         public string FranchisePhotoUrl { get; set; }
 
         [Column("franchise_id")]

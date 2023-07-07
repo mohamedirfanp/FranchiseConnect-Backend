@@ -16,9 +16,15 @@ namespace FranchiseGRPCService.Models
         [Column("franchise_provided_service_name")]
         public string FranchiseProvideServiceName { get; set; }
 
-        [Required,StringLength(300)]
+        [Required]
+        [StringLength(300)]
         [Column("franchise_provided_service_description")]
         public string FranchiseProvideServiceDescription { get; set; }
+
+
+        [Column("franchise_service_customization_status")]
+        public bool FranchiseServiceCustomizationStatus { get; set; }
+
 
         [Required]
         [Column("franchise_id")]

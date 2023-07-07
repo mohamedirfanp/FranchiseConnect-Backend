@@ -16,11 +16,16 @@ namespace FranchiseGRPCService.Models
         [Column("franchise_customized_option")]
         public bool FranchiseCustomizedOption { get; set; }
 
-        [Column("franchise_customized_option_id")]
-        public int FranchiseCustomizedOptionId { get; set; }
+
 
         [Column("owner_id")]
         public int ownerId { get; set; }
+
+        [Column("created_id")]
+        public int CreatedId { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set;}
 
         [Column("is_request_status")]
         public string IsRequestStatus { get; set; }
@@ -30,5 +35,8 @@ namespace FranchiseGRPCService.Models
         public int FranchiseId { get; set; }
 
         public virtual FranchiseModel franchiseId { get; set; }
+
+
+        public virtual ICollection<FranchiseSelectedServiceModel> FranchiseSelectedServices { get; set; }
     }
 }
