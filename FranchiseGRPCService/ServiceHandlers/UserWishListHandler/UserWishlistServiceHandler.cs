@@ -56,7 +56,8 @@ namespace FranchiseGRPCService.ServiceHandlers.UserWishListHandler
                     response.UserWishlistResponse.Add(new UserWishList
                     {
                         Franchise = _mapper.Map<Franchise.Franchise>(userWishlistModel.franchiseId),
-                        UserId = userWishlistModel.UserId
+                        UserId = userWishlistModel.UserId,
+                        WishlistId = userWishlistModel.UserWishlistId
                     });
                 }
 
