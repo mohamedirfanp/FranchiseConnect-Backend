@@ -11,6 +11,9 @@ namespace ApiGateway.Services.AccountService
         // A User Sign In function
         IActionResult UserLogin(UserSignInDto user);
 
+        // A franchisor in function
+        IActionResult FranchisorLogin(UserSignInDto user);
+
         // A function to get user profile
         GetProfileResponse GetProfile();
 
@@ -22,6 +25,5 @@ namespace ApiGateway.Services.AccountService
         IActionResult ChangePassword(ChangePasswordResquest changePasswordRequest);
 
        
-
     }
 }

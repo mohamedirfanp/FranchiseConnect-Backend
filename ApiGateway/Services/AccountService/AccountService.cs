@@ -19,7 +19,7 @@ namespace ApiGateway.Services.AccountService
             try
             {
 
-                var response = _grpcClients.AuthClient.SignUpUser(new UserCreationRequest
+                UserCreationResponse response = _grpcClients.AuthClient.SignUpUser(new UserCreationRequest
                 {
                     UserRequest = user
                 });
@@ -28,23 +28,39 @@ namespace ApiGateway.Services.AccountService
             }
             catch (RpcException ex)
             {
+                
                 return new BadRequestObjectResult(ex.Message);
             }
         }
         public IActionResult UserLogin(UserSignInDto user)
         {
          
-
             try
             {
-           
-                var response = _grpcClients.AuthClient.SignInUser(new AuthenticationRequest { UserRequest = user });
+                AuthenticationResponse response = _grpcClients.AuthClient.SignInUser(new AuthenticationRequest { UserRequest = user });
 
-                return new OkObjectResult(response);
+                return new OkObjectResult(response.JwtToken);
 
             }
             catch (RpcException ex)
             {
+
+                return new BadRequestObjectResult(ex.Message);
+            }
+        }
+
+        public IActionResult FranchisorLogin(UserSignInDto user)
+        {
+            try
+            {
+                AuthenticationResponse response = _grpcClients.AuthClient.SignInFranchisor(new AuthenticationRequest { UserRequest = user });
+
+                return new OkObjectResult(response.JwtToken);
+
+            }
+            catch (RpcException ex)
+            {
+
                 return new BadRequestObjectResult(ex.Message);
             }
         }
@@ -96,5 +112,7 @@ namespace ApiGateway.Services.AccountService
                 return new BadRequestObjectResult(ex.Message);
             }
         }
+
+       
     }
 }
