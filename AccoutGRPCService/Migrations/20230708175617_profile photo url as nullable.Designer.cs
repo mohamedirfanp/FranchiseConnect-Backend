@@ -4,6 +4,7 @@ using AccoutGRPCService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AccoutGRPCService.Migrations
 {
     [DbContext(typeof(FranchiseConnectContext))]
-    partial class FranchiseConnectContextModelSnapshot : ModelSnapshot
+    [Migration("20230708175617_profile photo url as nullable")]
+    partial class profilephotourlasnullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,7 +44,6 @@ namespace AccoutGRPCService.Migrations
                         .HasColumnName("user_password_salt");
 
                     b.Property<string>("ProfilePhotoUrl")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("profile_photo_url");
 
