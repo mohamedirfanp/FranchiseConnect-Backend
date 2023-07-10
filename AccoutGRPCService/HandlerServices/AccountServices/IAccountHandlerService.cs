@@ -7,7 +7,7 @@ namespace AccoutGRPCService.HandlerServices.AccountServices
     public interface IAccountHandlerService
     {
         // To Get User Profile
-        GetProfileResponse GetProfile();
+        GetProfileResponse GetProfile(GetProfileRequest profileRequest);
 
 
         // To Update Profile for User

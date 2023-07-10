@@ -15,19 +15,11 @@ namespace AccoutGRPCService.HandlerServices.AuthenticationService
         //private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly FranchiseConnectContext _context;
         private readonly IConfiguration _configuration;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AuthHandlerService(FranchiseConnectContext context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public AuthHandlerService(FranchiseConnectContext context, IConfiguration configuration)
         {
             _context = context;
             _configuration = configuration;
-            _httpContextAccessor = httpContextAccessor;
-        }
-        // To Get the Current User ID
-        public int GetCurrentUserId()
-        {
-            var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return int.Parse(userId);
         }
 
         // Check User Already Exists
@@ -205,14 +197,15 @@ namespace AccoutGRPCService.HandlerServices.AuthenticationService
         {
             try
             {
-                var currentUserId = GetCurrentUserId();
+                var currentUserId = changePasswordRequest.UserId;
 
                 //string currentRole = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.Role);
 
                 var currentUser = _context.User.Where(user => user.UserId == currentUserId).FirstOrDefault();
                 if (!VerifyPasswordHash(changePasswordRequest.OldPassword, currentUser.PasswordHash, currentUser.PasswordSalt))
                 {
-                    throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid Password"));
+                    //throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid Password"));
+                    throw new Exception("old Password is Invalid");
                 }
 
                 CreatePasswordHash(changePasswordRequest.NewPassword, out byte[] passwordHash, out byte[] passwordSalt);
@@ -221,8 +214,6 @@ namespace AccoutGRPCService.HandlerServices.AuthenticationService
                 currentUser.PasswordSalt = passwordSalt;
 
                 _context.SaveChanges();
-
-
 
                 return new ChangePasswordResponse { Response = "Successfully Password Changed" };
 

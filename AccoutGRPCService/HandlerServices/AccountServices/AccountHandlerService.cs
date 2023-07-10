@@ -9,21 +9,19 @@ namespace AccoutGRPCService.HandlerServices.AccountServices
 {
 	public class AccountHandlerService : IAccountHandlerService
 	{
-		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly FranchiseConnectContext _context;
 
 
-		public AccountHandlerService(FranchiseConnectContext context, IHttpContextAccessor httpContextAccessor)
+		public AccountHandlerService(FranchiseConnectContext context)
 		{
-			_httpContextAccessor = httpContextAccessor;
 			_context = context;
 		}
 
-		public GetProfileResponse GetProfile()
+		public GetProfileResponse GetProfile(GetProfileRequest profileRequest)
 		{
 			try
 			{
-				var currentUserId = int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+				var currentUserId = profileRequest.UserId;
 
 				//dynamic currentProfile = new System.Dynamic.ExpandoObject();
 
@@ -34,7 +32,8 @@ namespace AccoutGRPCService.HandlerServices.AccountServices
 				{
 					user.UserName,
 					user.UserEmail,
-					user.UserPhoneNumber
+					user.UserPhoneNumber,
+					user.ProfilePhotoUrl
 				}).FirstOrDefault();
 
 				//currentProfile.Profile = currentUser;
@@ -43,7 +42,8 @@ namespace AccoutGRPCService.HandlerServices.AccountServices
 				{
 					Name = currentUser.UserName,
 					Email = currentUser.UserEmail,
-					PhoneNumber = currentUser.UserPhoneNumber
+					PhoneNumber = currentUser.UserPhoneNumber,
+					ProfilePhotoUrl = currentUser.ProfilePhotoUrl
 				};
 
 				return new GetProfileResponse { Response = currentProfile };
@@ -60,11 +60,12 @@ namespace AccoutGRPCService.HandlerServices.AccountServices
 		{
 			try
 			{
-				var currentUserId = int.Parse(_httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier));
+				var currentUserId = user.UserId; 
 				var currentUser = _context.User.Where(user => user.UserId == currentUserId).FirstOrDefault();
 
 				currentUser.UserPhoneNumber = user.Request.PhoneNumber;
 				currentUser.UserName = user.Request.Name;
+				currentUser.ProfilePhotoUrl = user.Request.ProfilePhotoUrl;
 
 				_context.SaveChanges();
 
