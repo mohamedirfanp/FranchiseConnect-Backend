@@ -1,17 +1,28 @@
 ﻿using AccoutGRPCService.Protos;
+using ApiGateway.Dto_Models;
 using ApiGateway.GRPCMicroserviceClients;
 using Grpc.Core;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ApiGateway.Services.AccountService
 {
     public class AccountService : IAccountService
     {
         private readonly IGRPCClients _grpcClients;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public AccountService(IGRPCClients grpcClients)
+        public AccountService(IGRPCClients grpcClients, IHttpContextAccessor httpContextAccessor)
         {
             _grpcClients = grpcClients;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        // To Get the Current User ID
+        public int GetCurrentUserId()
+        {
+            var userId = _httpContextAccessor.HttpContext.User.FindFirstValue(ClaimTypes.NameIdentifier);
+            return int.Parse(userId);
         }
 
         public IActionResult CreateUser(UserSignUpDto user)
@@ -69,8 +80,11 @@ namespace ApiGateway.Services.AccountService
         {
             try
             {
-             
-                var response = _grpcClients.AccountClient.GetProfile(new Google.Protobuf.WellKnownTypes.Empty());
+
+                var response = _grpcClients.AccountClient.GetProfile(new GetProfileRequest
+                {
+                    UserId = GetCurrentUserId()
+                });
 
                 return response;
             }
@@ -80,12 +94,22 @@ namespace ApiGateway.Services.AccountService
             }
         }
 
-        public IActionResult UpdateProfile(UpdateUserRequest updateUserRequest)
+        public IActionResult UpdateProfile(UpdataProfileDto updateUserRequest)
         {
             try
             {
 
-                var response = _grpcClients.AccountClient.UpdateUser(updateUserRequest);
+                var response = _grpcClients.AccountClient.UpdateUser(new UpdateUserRequest
+                {
+                    UserId = GetCurrentUserId(),
+                    Request = new UserDto
+                    {
+                        Name = updateUserRequest.Name,
+                        Email = updateUserRequest.Email,
+                        ProfilePhotoUrl = updateUserRequest.ProfilePhotoUrl,
+                        PhoneNumber = updateUserRequest.PhoneNumber,
+                    }
+                });
 
                 return new OkObjectResult(response);
             }
@@ -96,13 +120,19 @@ namespace ApiGateway.Services.AccountService
         }
 
 
-        public IActionResult ChangePassword(ChangePasswordResquest changePasswordRequest)
+        public IActionResult ChangePassword(ChangePasswordDto changePasswordRequest)
         {
 
             try
             {
               
-                var response = _grpcClients.AuthClient.ChangePassword(changePasswordRequest);
+                var response = _grpcClients.AuthClient.ChangePassword(new ChangePasswordResquest
+                {
+                    UserId = GetCurrentUserId(),
+                    OldPassword = changePasswordRequest.oldPassword,
+                    NewPassword = changePasswordRequest.newPassword
+
+                });
 
                 return new OkObjectResult(response);
 

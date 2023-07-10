@@ -1,4 +1,5 @@
-﻿using ApiGateway.GRPCMicroserviceClients;
+﻿using ApiGateway.Dto_Models;
+using ApiGateway.GRPCMicroserviceClients;
 using ChatGRPCService.Protos;
 using ChatPackage;
 using Grpc.Core;
@@ -59,11 +60,17 @@ namespace ApiGateway.Services.ChatService
             }
         }
 
-        public IActionResult CreateQuery(CreateQueryRequest queryRequest)
+        public IActionResult CreateQuery(CreateTicket queryRequest)
         {
             try
             {
-                var response = _grpcClients.QueryServiceClient.CreateQuery(queryRequest);
+                var response = _grpcClients.QueryServiceClient.CreateQuery(new CreateQueryRequest
+                {
+                    QueryTitle = queryRequest.QueryTitle,
+                    QueryDescription = queryRequest.QueryDescription,
+                    QueryType = queryRequest.QueryType,
+                    CreatedId = GetCurrentUserId()
+                });
 
                 return new OkObjectResult(response);
             }

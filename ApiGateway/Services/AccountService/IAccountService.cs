@@ -1,4 +1,5 @@
 ﻿using AccoutGRPCService.Protos;
+using ApiGateway.Dto_Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ApiGateway.Services.AccountService
@@ -19,10 +20,10 @@ namespace ApiGateway.Services.AccountService
 
 
         // A function to Update Profile
-        IActionResult UpdateProfile(UpdateUserRequest updateUserRequest);
+        IActionResult UpdateProfile(UpdataProfileDto updateUserRequest);
 
         // A function to Update Password
-        IActionResult ChangePassword(ChangePasswordResquest changePasswordRequest);
+        IActionResult ChangePassword(ChangePasswordDto changePasswordRequest);
 
        
     }

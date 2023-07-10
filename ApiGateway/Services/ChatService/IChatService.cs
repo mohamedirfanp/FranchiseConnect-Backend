@@ -1,4 +1,5 @@
-﻿using ChatGRPCService.Protos;
+﻿using ApiGateway.Dto_Models;
+using ChatGRPCService.Protos;
 using ChatPackage;
 using Microsoft.AspNetCore.Mvc;
 
@@ -13,7 +14,7 @@ namespace ApiGateway.Services.ChatService
         GetConversationsResponse GetConversations();
 
         // A function to create a query
-        IActionResult CreateQuery(CreateQueryRequest queryRequest);
+        IActionResult CreateQuery(CreateTicket queryRequest);
 
         // A function to get ticket for user
         GetTicketsResponse GetTicketsForUser();

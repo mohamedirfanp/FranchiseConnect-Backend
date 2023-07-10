@@ -123,6 +123,26 @@ namespace ApiGateway.Services.FranchiseService
             }
         }
 
+        public GetFranchisesRespsonse GetFranchiseByOwnerId()
+        {
+            try
+            {
+
+                var response = _grpcClients.FranchiseClient.GetFranchiseByOwnerId(new GetFranchiseByOwnerIdRequest
+                {
+                    OwnerId = GetCurrentUserId()
+                });
+
+
+                return response;
+
+            }
+            catch (RpcException ex)
+            {
+                throw new RpcException(new Status(Grpc.Core.StatusCode.Unimplemented, ex.Message));
+            }
+        }
+
 
         // Franchise Gallery Service
         public IActionResult UploadGallery(FranchiseGalleryUploadRequest uploadRequest)
@@ -202,6 +222,8 @@ namespace ApiGateway.Services.FranchiseService
                     FranchiseId = franchiseUserRequest.FranchiseId,
                     OwnerId = franchiseUserRequest.OwnerId,
                     UserId = GetCurrentUserId(),
+                    InvestmentBudget = franchiseUserRequest.InvestmentBudget,
+                    Space = franchiseUserRequest.Space
                 };
                 userRequest.ServicesId.Add(franchiseUserRequest.ServicesId);
 
@@ -345,6 +367,6 @@ namespace ApiGateway.Services.FranchiseService
             }
         }
 
-
+  
     }
 }

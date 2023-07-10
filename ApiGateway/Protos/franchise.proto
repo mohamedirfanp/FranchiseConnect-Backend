@@ -14,6 +14,8 @@ service FranchiseService {
   rpc FranchiseExist(FranchiseExistRequest) returns (FranchiseExistResponse);
   rpc IncreseViewCount(IncreseViewCountRequest) returns (IncreseViewCountResponse);
 
+  rpc GetFranchiseByOwnerId(GetFranchiseByOwnerIdRequest) returns (GetFranchisesRespsonse);
+
 }
 
 message FranchiseExistRequest
@@ -24,6 +26,12 @@ message FranchiseExistRequest
 message FranchiseExistResponse
 {
 	bool franchise_exist = 1;
+}
+
+
+message GetFranchiseByOwnerIdRequest 
+{
+	int32 ownerId = 1;
 }
 
 

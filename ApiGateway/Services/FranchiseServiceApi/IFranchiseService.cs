@@ -13,6 +13,9 @@ namespace ApiGateway.Services.FranchiseService
         // Get Franchise by Id
         GetFranchisesRespsonse GetFranchiseById(int id);
 
+        // Get Franchise by Owner Id 
+        GetFranchisesRespsonse GetFranchiseByOwnerId();
+
         // Create a Franchise
         CreateFranchiseResponse CreateFranchise(CreateFranchiseDto request);
 
