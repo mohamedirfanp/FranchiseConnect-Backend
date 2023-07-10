@@ -102,6 +102,9 @@ message FranchiseRequestModel
 	 google.protobuf.Timestamp created_at = 6;
 	 string is_request_status = 7;
 	 int32 franchise_id = 8;
+	 int32 conversion_id = 9;
+	 string investment_budget = 10;
+	 string space = 11;
 }
 
 message FranchiseRequestResponse

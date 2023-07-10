@@ -16,8 +16,6 @@ namespace FranchiseGRPCService.Models
         [Column("franchise_customized_option")]
         public bool FranchiseCustomizedOption { get; set; }
 
-
-
         [Column("owner_id")]
         public int ownerId { get; set; }
 
@@ -30,9 +28,20 @@ namespace FranchiseGRPCService.Models
         [Column("is_request_status")]
         public string IsRequestStatus { get; set; }
 
+        // TODO : Added new investment budget and space accomdation
+        [Column("investment_budget")]
+        public string InvestmentBudget { get; set; }
+
+        [Column("space")]
+        public string Space { get; set; }
+
+
         [Column("franchise_id")]
         [ForeignKey("franchiseId")]
         public int FranchiseId { get; set; }
+
+        [Column("conversion_id")]
+        public int? ConversionId { get; set; }
 
         public virtual FranchiseModel franchiseId { get; set; }
 

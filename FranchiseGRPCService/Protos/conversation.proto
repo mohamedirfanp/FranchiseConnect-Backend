@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+option csharp_namespace = "ChatGRPCService.Protos";
+package chatPackage;
+
+import "protos/chat_common.proto";
+
+
+service ConversationService
+{
+	rpc CreateConversation(CreateConversationRequest) returns (CreateConversationResponse);
+	rpc GetConversations(CommonRequest) returns (GetConversationsResponse);
+
+	rpc UpdateAcceptedStatus(UpdateAcceptedStatusRequest) returns (CommonResponse);
+
+}
+
+message UpdateAcceptedStatusRequest
+{
+	int32 conversation_id = 1;
+	string status = 2;
+}
+
+message CreateConversationRequest
+{
+	int32 franchisee_id = 2;
+	int32 franchisor_id = 3;
+	string franchisee_name = 1;
+	string franchisor_franchise_name = 5;
+	string franchisor_name = 4;
+}
+
+message CreateConversationResponse
+{
+	int32 conversation_id = 1;
+}
+
+
+message GetConversationsResponse
+{
+	repeated Conversation conversations = 1;
+}
+

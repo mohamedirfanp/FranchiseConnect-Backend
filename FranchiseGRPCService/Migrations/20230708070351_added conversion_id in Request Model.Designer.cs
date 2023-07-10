@@ -4,6 +4,7 @@ using FranchiseGRPCService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FranchiseGRPCService.Migrations
 {
     [DbContext(typeof(FranchiseConnectContext))]
-    partial class FranchiseConnectContextModelSnapshot : ModelSnapshot
+    [Migration("20230708070351_added conversion_id in Request Model")]
+    partial class addedconversion_idinRequestModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -175,20 +177,10 @@ namespace FranchiseGRPCService.Migrations
                         .HasColumnType("bit")
                         .HasColumnName("franchise_sample_box_option");
 
-                    b.Property<string>("InvestmentBudget")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("investment_budget");
-
                     b.Property<string>("IsRequestStatus")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("is_request_status");
-
-                    b.Property<string>("Space")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("space");
 
                     b.Property<int>("ownerId")
                         .HasColumnType("int")

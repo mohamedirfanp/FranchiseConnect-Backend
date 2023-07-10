@@ -1,0 +1,52 @@
+syntax = "proto3";
+
+import "google/protobuf/empty.proto";
+
+option csharp_namespace = "AccoutGRPCService.Protos";
+
+package account;
+
+
+
+// The Account service definition.
+service AccountHandler {
+
+  // Get Profile
+  rpc GetProfile (GetProfileRequest) returns (GetProfileResponse);
+
+  // User Update Profile
+  rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse);
+
+}
+
+message GetProfileRequest
+{
+	int32 user_id = 1;
+}
+
+message UserDto
+{
+	string name = 1;
+	string email = 2;
+	string phoneNumber = 3;
+	string profilePhotoUrl = 4;
+
+}
+
+message GetProfileResponse
+{
+	UserDto response = 1;
+}
+
+message UpdateUserRequest 
+{
+	UserDto request = 1;
+}
+
+message UpdateUserResponse
+{
+	string response = 1;
+}
+ 
+
+
