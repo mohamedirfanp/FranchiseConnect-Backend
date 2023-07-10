@@ -7,10 +7,13 @@ namespace ChatGRPCService.HandlerServices.ConversationsServiceHandler
     {
 
         // A function to create a conversation
-        CommonResponse CreateConversation(CreateConversationRequest conversationRequest);
+        CreateConversationResponse CreateConversation(CreateConversationRequest conversationRequest);
 
         // A function to get Conversations 
         GetConversationsResponse GetConversations(CommonRequest request);
+
+        // A function to update the Accept Status
+        CommonResponse UpdateAcceptStatus (UpdateAcceptedStatusRequest request);
 
     }
 }

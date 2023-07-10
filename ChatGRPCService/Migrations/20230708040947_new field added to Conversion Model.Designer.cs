@@ -4,6 +4,7 @@ using ChatGRPCService.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ChatGRPCService.Migrations
 {
     [DbContext(typeof(FranchiseConnectContext))]
-    partial class FranchiseConnectContextModelSnapshot : ModelSnapshot
+    [Migration("20230708040947_new field added to Conversion Model")]
+    partial class newfieldaddedtoConversionModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -95,9 +97,8 @@ namespace ChatGRPCService.Migrations
                         .HasColumnType("nvarchar(max)")
                         .HasColumnName("franchisor_name");
 
-                    b.Property<string>("IsAccepted")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)")
+                    b.Property<bool>("IsAccepted")
+                        .HasColumnType("bit")
                         .HasColumnName("is_accepted");
 
                     b.HasKey("ConversationId");

@@ -2,6 +2,7 @@
 using ChatGRPCService.Models;
 using ChatGRPCService.Protos;
 using ChatPackage;
+using Google.Protobuf.WellKnownTypes;
 using Grpc.Core;
 
 namespace ChatGRPCService.HandlerServices.ConversationsServiceHandler
@@ -16,7 +17,7 @@ namespace ChatGRPCService.HandlerServices.ConversationsServiceHandler
         }
 
         // To create a conversation between Members
-        public CommonResponse CreateConversation(CreateConversationRequest conversationRequest)
+        public CreateConversationResponse CreateConversation(CreateConversationRequest conversationRequest)
         {
             try
             {
@@ -25,14 +26,18 @@ namespace ChatGRPCService.HandlerServices.ConversationsServiceHandler
                 newConversation.FranchisorId = conversationRequest.FranchisorId;
                 newConversation.FranchiseeName = conversationRequest.FranchiseeName;
                 newConversation.FranchisorFranchiseName = conversationRequest.FranchisorFranchiseName;
+                newConversation.FranchisorName = conversationRequest.FranchisorName;
+
+                newConversation.CreatedAt = DateTime.Now;
+                newConversation.IsAccepted = "Pending";
 
                 _context.ConversationModel.Add(newConversation);
 
                 _context.SaveChanges();
 
-                return new CommonResponse
+                return new CreateConversationResponse
                 {
-                    Response = "Successfully Conversation Created"
+                    ConversationId = newConversation.ConversationId
                 };
 
             }
@@ -58,7 +63,9 @@ namespace ChatGRPCService.HandlerServices.ConversationsServiceHandler
                         FranchiseeName = conversation.FranchiseeName,
                         FranchisorFranchiseName = conversation.FranchisorFranchiseName,
                         ConversationId = conversation.ConversationId,
-                        IsBlocked = conversation.IsBlocked
+                        CreatedAt = Timestamp.FromDateTime(conversation.CreatedAt.ToUniversalTime()),
+                        FranchisorName = conversation.FranchisorName,
+                        IsAccepted = conversation.IsAccepted
                     };
 
                     getConversations.Conversations.Add(getConversation);
@@ -70,6 +77,32 @@ namespace ChatGRPCService.HandlerServices.ConversationsServiceHandler
 
             }
             catch(Exception ex)
+            {
+                throw new RpcException(new Status(StatusCode.Unknown, ex.Message));
+            }
+        }
+
+        public CommonResponse UpdateAcceptStatus(UpdateAcceptedStatusRequest request)
+        {
+            try
+            {
+                var conversation = _context.ConversationModel.Where(conv => conv.ConversationId == request.ConversationId).FirstOrDefault();
+                
+                
+                conversation.IsAccepted = request.Status;
+
+                _context.ConversationModel.Update(conversation);
+
+                _context.SaveChanges();
+
+                return new CommonResponse
+                {
+                    Response = "Successfully Accepted"
+                };
+
+
+            }
+            catch (Exception ex)
             {
                 throw new RpcException(new Status(StatusCode.Unknown, ex.Message));
             }

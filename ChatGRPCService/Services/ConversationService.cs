@@ -13,7 +13,7 @@ namespace ChatGRPCService.Services
         {
             _conversationServiceHandler = conversionServiceHandler;
         }
-        public override Task<CommonResponse> CreateConversation(CreateConversationRequest request, ServerCallContext context)
+        public override Task<CreateConversationResponse> CreateConversation(CreateConversationRequest request, ServerCallContext context)
         {
             var response = _conversationServiceHandler.CreateConversation(request);
 
@@ -23,6 +23,13 @@ namespace ChatGRPCService.Services
         public override Task<GetConversationsResponse> GetConversations(CommonRequest request, ServerCallContext context)
         {
             var response = _conversationServiceHandler.GetConversations(request);
+
+            return Task.FromResult(response);
+        }
+
+        public override Task<CommonResponse> UpdateAcceptedStatus(UpdateAcceptedStatusRequest request, ServerCallContext context)
+        {
+            var response = _conversationServiceHandler.UpdateAcceptStatus(request);
 
             return Task.FromResult(response);
         }

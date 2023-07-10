@@ -19,8 +19,8 @@ namespace ChatGRPCService.Models
         public int FranchisorId { get; set; }
 
 
-        [Column("is_blocked")]
-        public bool IsBlocked { get; set; } = false;
+        [Column("is_accepted")]
+        public string IsAccepted { get; set; } = "Pending";
 
         [Required]
         [Column("franchisee_name")]
@@ -30,7 +30,12 @@ namespace ChatGRPCService.Models
         [Column("franchisor_franchise_name")]
         public string FranchisorFranchiseName { get; set; }
 
-        
+        [Required]
+        [Column("franchisor_name")]
+        public string FranchisorName { get; set; }
+
+        [Column("created_at")]
+        public DateTime CreatedAt { get; set;}
 
     }
 }

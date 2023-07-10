@@ -8,9 +8,17 @@ import "protos/chat_common.proto";
 
 service ConversationService
 {
-	rpc CreateConversation(CreateConversationRequest) returns (CommonResponse);
+	rpc CreateConversation(CreateConversationRequest) returns (CreateConversationResponse);
 	rpc GetConversations(CommonRequest) returns (GetConversationsResponse);
 
+	rpc UpdateAcceptedStatus(UpdateAcceptedStatusRequest) returns (CommonResponse);
+
+}
+
+message UpdateAcceptedStatusRequest
+{
+	int32 conversation_id = 1;
+	string status = 2;
 }
 
 message CreateConversationRequest
@@ -19,8 +27,14 @@ message CreateConversationRequest
 	int32 franchisor_id = 3;
 	string franchisee_name = 1;
 	string franchisor_franchise_name = 5;
-	bool is_blocked = 4;
+	string franchisor_name = 4;
 }
+
+message CreateConversationResponse
+{
+	int32 conversation_id = 1;
+}
+
 
 message GetConversationsResponse
 {
