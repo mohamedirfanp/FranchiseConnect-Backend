@@ -57,6 +57,7 @@ message AuthenticationResponse
 
 message ChangePasswordResquest
 {
+	int32 userId = 3;
 	string oldPassword = 1;
 	string newPassword = 2;
 }
