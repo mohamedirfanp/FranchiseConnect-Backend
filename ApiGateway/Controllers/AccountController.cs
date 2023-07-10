@@ -1,4 +1,5 @@
 ﻿using AccoutGRPCService.Protos;
+using ApiGateway.Dto_Models;
 using ApiGateway.Services.AccountService;
 using Grpc.Core;
 using Grpc.Net.Client;
@@ -87,23 +88,28 @@ namespace ApiGateway.Controllers
 
         }
 
-
         // Put to update user profile
         [HttpPut("update"), Authorize]
-		public IActionResult UpdateProfile([FromBody] UpdateUserRequest updateUserRequest)
+		public IActionResult UpdateProfile([FromBody] UpdataProfileDto updateUserRequest)
 		{
 			var response = _accountService.UpdateProfile(updateUserRequest);
-
-			return Ok(response);
-		}
+            if (response is BadRequestObjectResult badRequest)
+            {
+                return badRequest;
+            }
+            return Ok(response);
+        }
 
 		// Put to change password
 		[HttpPut("change-password"), Authorize]
-		public IActionResult ChangePassword([FromBody] ChangePasswordResquest changePasswordRequest)
+		public IActionResult ChangePassword([FromBody] ChangePasswordDto changePasswordRequest)
 		{
-			var response = _accountService.ChangePassword(changePasswordRequest);
-
-			return Ok(response);
+            var response = _accountService.ChangePassword(changePasswordRequest);
+            if (response is BadRequestObjectResult badRequest)
+            {
+                return badRequest;
+            }
+            return Ok(response);
 		}
 
 	}

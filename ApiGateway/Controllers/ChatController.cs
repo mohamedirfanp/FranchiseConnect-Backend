@@ -1,4 +1,5 @@
-﻿using ApiGateway.Services.ChatService;
+﻿using ApiGateway.Dto_Models;
+using ApiGateway.Services.ChatService;
 using ChatGRPCService.Protos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -27,7 +28,7 @@ namespace ApiGateway.Controllers
         }
 
         // To Get the Tickets
-        [HttpGet("get/user/tickets"), Authorize]
+        [HttpGet("user/tickets"), Authorize]
         public GetTicketsResponse GetTicketsForUser()
         {
             var response = _chatService.GetTicketsForUser();
@@ -35,9 +36,18 @@ namespace ApiGateway.Controllers
             return response;
         }
 
+        // To Get all the Ticket for Admin
+        [HttpGet("all/tickets"), Authorize(Roles = "Admin")]
+        public GetTicketsResponse GetTicketsForAdmin()
+        {
+            var response = _chatService.GetTicketsForAdmin();
+
+            return response;
+        }
+
         // To Create a Ticket
-        [HttpPost("create/ticket"), Authorize]
-        public async Task<IActionResult> CreateTicket(CreateQueryRequest queryRequest)
+        [HttpPost("ticket"), Authorize]
+        public async Task<IActionResult> CreateTicket(CreateTicket queryRequest)
         {
             var response = _chatService.CreateQuery(queryRequest);
 
@@ -49,14 +59,7 @@ namespace ApiGateway.Controllers
             return Ok(response);
         }
 
-        // To Get all the Ticket for Admin
-        [HttpGet("get/all/tickets"), Authorize(Roles = "Admin")]
-        public GetTicketsResponse GetTicketsForAdmin()
-        {
-            var response = _chatService.GetTicketsForAdmin();
 
-            return response;
-        }
 
         // To Close The Ticket
         [HttpPut("close/Ticket"), Authorize(Roles = "Admin")]

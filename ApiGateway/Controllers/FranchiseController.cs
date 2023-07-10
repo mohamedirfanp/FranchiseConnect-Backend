@@ -41,6 +41,16 @@ namespace ApiGateway.Controllers
 			return response;
 		}
 
+
+		// GET on OwnerId
+		[HttpGet("franchise-account"), Authorize]
+		public GetFranchisesRespsonse GetByOwnerId()
+		{
+            var response = _franchiseService.GetFranchiseByOwnerId();
+
+            return response;
+        }
+
 		// POST api/<FranchiseController>
 		[HttpPost, Authorize(Roles="Franchisor")]
 		public CreateFranchiseResponse Post([FromBody] CreateFranchiseDto request)
@@ -72,7 +82,7 @@ namespace ApiGateway.Controllers
 
 		/// Franchise Gallery Endpoints
 		// PUT Franchise - api/<FranchiseController>/gallery
-		[HttpPut("gallery/upload")]
+		[HttpPut("gallery/upload"), Authorize]
 		public IActionResult uploadGalleryRequest([FromBody] FranchiseGalleryUploadRequest request)
 		{
 			var response = _franchiseService.UploadGallery(request);
@@ -85,7 +95,7 @@ namespace ApiGateway.Controllers
             return Ok(response);
         }
 
-		[HttpDelete("gallery/delete")]
+		[HttpDelete("gallery/delete"), Authorize]
 		public IActionResult deleteGalleryRequest([FromBody] FranchiseGalleryDeleteRequest request)
 		{
             var response = _franchiseService.DeleteGallery(request);
@@ -103,7 +113,7 @@ namespace ApiGateway.Controllers
 		/* Franchise Provide Service Endpoints*/
 
 		// Create a new Provide Service in the Franchise 
-		[HttpPut("service/create")]
+		[HttpPut("service/create"), Authorize]
 		public IActionResult CreateProvideService([FromBody] CreateFranchiseServiceRequest request)
 		{
             var response = _franchiseService.CreateProvideService(request);
@@ -117,7 +127,7 @@ namespace ApiGateway.Controllers
         }
 
 		// Delete a existing Provided Service in the Franchise
-		[HttpDelete("service/delete/{franchise_provide_service_id}")]
+		[HttpDelete("service/delete/{franchise_provide_service_id}"), Authorize]
 		public IActionResult DeleteProvideService(int franchise_provide_service_id)
 		{
             var response = _franchiseService.DeleteProvidedService(franchise_provide_service_id);
@@ -209,10 +219,13 @@ namespace ApiGateway.Controllers
 			return response;
 		}
 
-		[HttpDelete("user-wishlist"), Authorize(Roles = "Franchisee")]
-		public IActionResult RemoveWishList(RemoveUserWishListRequest removeUserWishRequest)
+		[HttpDelete("user-wishlist/{wishlistId}"), Authorize(Roles = "Franchisee")]
+		public IActionResult RemoveWishList(int wishlistId)
 		{
-            var response = _franchiseService.RemoveUserWishlist(removeUserWishRequest);
+            var response = _franchiseService.RemoveUserWishlist(new RemoveUserWishListRequest
+			{
+				UserWishlistId = wishlistId
+			});
 
 
             if (response is BadRequestObjectResult badRequest)
