@@ -210,9 +210,39 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseServiceHandlers
 			}
 		}
 
+		// A function to get franchise by owner Id
+        public GetFranchisesRespsonse GetFranchiseByOwnerId(GetFranchiseByOwnerIdRequest request)
+        {
+            try
+            {
+                var franchiseDetailFromDB = _context.FranchiseModel.Where(f => f.FranchiseOwnerId == request.OwnerId).Include(f => f.franchiseGallery).Include(f => f.franchiseServices).
+                    Include(f => f.franchiseReviews).FirstOrDefault();
 
-		// Type Casting Functions
-		private Franchise.Franchise TypeCastingFranchise(FranchiseModel model)
+                GetFranchisesRespsonse getFranchisesRespsonse = new GetFranchisesRespsonse()
+                {
+                    Franchise = TypeCastingFranchise(franchiseDetailFromDB),
+                    FranchiseSocial = TypeCastingSocial(_context.FranchiseSocialModel.FirstOrDefault(f => f.FranchiseSocialId == franchiseDetailFromDB.FranchiseSocialId))
+                };
+
+                getFranchisesRespsonse.FranchiseGalleryList.AddRange(TypeCastingGalleryList(franchiseDetailFromDB.franchiseGallery));
+                getFranchisesRespsonse.FrachiseServiceList.AddRange(TypeCastingServiceList(franchiseDetailFromDB.franchiseServices));
+
+
+                return getFranchisesRespsonse;
+
+
+
+            }
+            catch (Exception ex)
+            {
+                throw new RpcException(new Status(StatusCode.Unknown, ex.Message));
+            }
+        }
+
+
+
+        // Type Casting Functions
+        private Franchise.Franchise TypeCastingFranchise(FranchiseModel model)
 		{
 			Franchise.Franchise franchiseFromProto = new Franchise.Franchise()
 			{
@@ -348,5 +378,7 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseServiceHandlers
                 throw new RpcException(new Status(StatusCode.Unknown, ex.Message));
             }
         }
+
+       
     }
 }

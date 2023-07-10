@@ -78,6 +78,8 @@ namespace FranchiseGRPCService.ServiceHandlers.UserWishListHandler
 
 
                 _context.UserWishlistModel.Remove(userWishlistModel);
+
+                _context.SaveChanges();
                 
 
                 return new UserWishListServiceResponse

@@ -13,6 +13,9 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseServiceHandlers
 
         // A function to get the franchise by Id
         GetFranchisesRespsonse GetFranchiseById(GetFranchiseByIdRequest request);
+        
+        // A function to get the franchise by Id
+        GetFranchisesRespsonse GetFranchiseByOwnerId(GetFranchiseByOwnerIdRequest request);
 
         // A function to know franchise exist for the user
         FranchiseExistResponse FranchiseExists(FranchiseExistRequest request);

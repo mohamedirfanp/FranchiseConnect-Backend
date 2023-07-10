@@ -8,6 +8,10 @@ using FranchiseGRPCService.ServiceHandlers.FranchiseProvideServiceHandlers;
 using FranchiseGRPCService.ServiceHandlers.FranchiseRequestHandlers;
 using FranchiseGRPCService.ServiceHandlers.UserWishListHandler;
 
+using FranchiseGRPCService.GrpcServicesClient;
+using FranchiseGRPCService.MicroservicesClients.AccountClient;
+using FranchiseGRPCService.MicroservicesClients.ConversationClients;
+
 namespace FranchiseGRPCService
 {
     public class Program
@@ -31,6 +35,11 @@ namespace FranchiseGRPCService
             builder.Services.AddDbContext<FranchiseConnectContext>(options =>
                 options.UseSqlServer(connectionString));
 
+
+
+            // Add Client for GRPC Services
+            builder.Services.AddSingleton<IGRPCClients, GRPCClients>();
+
             // Add services to the container.
             builder.Services.AddGrpc();
             builder.Services.AddGrpcReflection();
@@ -45,6 +54,9 @@ namespace FranchiseGRPCService
             builder.Services.AddScoped<IFranchiseRequestHandler, FranchiseRequestHandler>();
             builder.Services.AddScoped<IUserWishlistServiceHandler, UserWishlistServiceHandler>();
 
+            // Add scoped Services for internal communication
+            builder.Services.AddScoped<IAccountClientService, AccountClientService>();
+            builder.Services.AddScoped<IConversationClientService, ConversationClientService>();
 
 
             var app = builder.Build();

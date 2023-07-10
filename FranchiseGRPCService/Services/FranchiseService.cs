@@ -31,6 +31,12 @@ namespace FranchiseGRPCService.Services
             return Task.FromResult(response);
         }
 
+        public override Task<GetFranchisesRespsonse> GetFranchiseByOwnerId(GetFranchiseByOwnerIdRequest request, ServerCallContext context)
+        {
+            var response = _franchiseServiceHandler.GetFranchiseByOwnerId(request);
+            return Task.FromResult(response);
+        }
+
         //public override Task<GetFranchisesRespsonse> GetFranchiseById(GetFranchiseByIdRequest request, ServerCallContext context)
         public override Task<GetFranchisesRespsonse> GetFranchiseById(GetFranchiseByIdRequest request, ServerCallContext context)
         {
@@ -49,6 +55,8 @@ namespace FranchiseGRPCService.Services
             var response = _franchiseServiceHandler.IncrementViewCount(request);
             return Task.FromResult(response);
         }
+
+
 
     }
 }

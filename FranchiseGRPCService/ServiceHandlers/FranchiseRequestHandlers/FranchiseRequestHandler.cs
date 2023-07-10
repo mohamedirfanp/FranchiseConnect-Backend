@@ -1,6 +1,11 @@
-﻿using AutoMapper;
+﻿using AccoutGRPCService.Protos;
+using AutoMapper;
+using ChatGRPCService.Protos;
+using ChatPackage;
 using Franchise;
 using FranchiseGRPCService.Data;
+using FranchiseGRPCService.MicroservicesClients.AccountClient;
+using FranchiseGRPCService.MicroservicesClients.ConversationClients;
 using FranchiseGRPCService.Models;
 using Grpc.Core;
 using Microsoft.EntityFrameworkCore;
@@ -11,33 +16,68 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseRequestHandlers
     {
         private readonly FranchiseConnectContext _context;
         private readonly IMapper _mapper;
+        private readonly IAccountClientService _accountClientService;
+        private readonly IConversationClientService _conversionClientService;
 
-        public FranchiseRequestHandler(FranchiseConnectContext context, IMapper mapper)
+        public FranchiseRequestHandler(FranchiseConnectContext context, IMapper mapper, IAccountClientService accountClientService, IConversationClientService conversationClientService)
         {
             _context = context;
             _mapper = mapper;
+            _accountClientService = accountClientService;
+            _conversionClientService = conversationClientService;
         }
         public FranchiseUserResponse CreateFranchiseRequest(CreateFranchiseUserRequest userRequest)
         {
             try
             {
                 var requestModel = _context.FranchiseRequestModel.Any(freq => freq.FranchiseId == userRequest.FranchiseId && freq.CreatedId == userRequest.UserId && freq.IsRequestStatus == "Pending");
-                /*
-                                if(requestModel)
-                                {
-                                    throw new Exception("Request Already Made. Please wait for franchisor approval");
-                                }*/
+
+
+                // DEV - Undo in PROD
+
+                if (requestModel)
+                {
+                    throw new Exception("Request Already Made. Please wait for franchisor approval");
+                }
+
+
+                // Get Franchise Info
+
+                var franchise = _context.FranchiseModel.Where(f => f.FranchiseId == userRequest.FranchiseId).FirstOrDefault();
+
+                // Get the Profile for Franchisor owner and Franchisee
+
+                // Profile - Franchise Owner
+                GetProfileResponse ownerProfile = _accountClientService.GetProfile(userRequest.OwnerId);
+                Console.WriteLine(ownerProfile);
+
+                // Profile - Franchisee
+                GetProfileResponse userProfile = _accountClientService.GetProfile(userRequest.UserId);
+                Console.WriteLine(userProfile);
+
+                // Create a conversion between two party
+                // TODO - Optional - ADD profile photo link
+                CreateConversationResponse newConversion = _conversionClientService.CreateConversation(new CreateConversationRequest
+                {
+                    FranchiseeId = userRequest.UserId,
+                    FranchiseeName = userProfile.Response.Name,
+                    FranchisorId = userRequest.OwnerId,
+                    FranchisorName = ownerProfile.Response.Name,
+                    FranchisorFranchiseName = franchise.FranchiseName
+                });
 
 
                 Models.FranchiseRequestModel model = new Models.FranchiseRequestModel();
                 model.FranchiseId = userRequest.FranchiseId;
-/*                model.FranchiseCustomizedOption = userRequest.FranchiseCustomizationOption;
-                model.FranchiseSampleBoxOption = userRequest.FranchiseSampleBoxOption;*/
-                //model.FranchiseCustomizedOptionId = userRequest.FranchiseCustomizationOption ? userRequest.FranhiseCustomizationId : 0;
                 model.ownerId = userRequest.OwnerId;
                 model.IsRequestStatus = "Pending";
                 model.CreatedAt = DateTime.Now;
                 model.CreatedId = userRequest.UserId;
+                model.ConversionId = newConversion.ConversationId;
+                model.InvestmentBudget = userRequest.InvestmentBudget;
+                model.Space = userRequest.Space;
+
+
 
                 _context.FranchiseRequestModel.Add(model);
 
@@ -51,6 +91,7 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseRequestHandlers
                     _context.franchiseSelectedServiceModels.Add(franchiseSelectedService);
                 }
                 _context.SaveChanges();
+
 
                 return new FranchiseUserResponse
                 {
@@ -90,27 +131,6 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseRequestHandlers
                 }
 
                 responseList.Responses.Add(franchiseRequestList);
-               /* foreach (var request in responseFromDB)
-                {
-                    dynamic tempObj = new System.Dynamic.ExpandoObject();
-                    tempObj.franchiseRequest = request;
-                    response.FranchiseRequest = Google.Protobuf.WellKnownTypes.Any.Pack(tempObj.franchiseRequest);
-                    Dictionary<int, List<FranchiseCustomizedOptionModel>> franchiseCustomizedOptionModelResponse = new Dictionary<int, List<FranchiseCustomizedOptionModel>>();
-
-                    if (request.FranchiseCustomizedOption)
-                    {
-                        *//*var customizedOptionResponse = _context.FranchiseCustomizedOptionModel.Include(f => f.FranchiseSelectedServices).Where(f => f.FranchiseCustomizedOptionId == request.FranchiseCustomizedOptionId).ToList();
-
-                        franchiseCustomizedOptionModelResponse.Add(request.FranchiseCustomizedOptionId, customizedOptionResponse);
-
-                        tempObj.franchiseCustomization = franchiseCustomizedOptionModelResponse;
-                        response.FranchiseCustomization.Add(tempObj.franchiseCustomization);*//*
-                    }
-                    responseList.Responses.Add(response);
-
-
-                }*/
-
                
                 return responseList;
             }
@@ -125,8 +145,20 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseRequestHandlers
         {
             try
             {
+                // TODO : Update Request Accepted Status in Conversation Table
+
 
                 var requestModel = _context.FranchiseRequestModel.Where(f => f.FranchiseRequestId == updateStatusRequest.FranchiseRequestId).FirstOrDefault();
+
+                CommonResponse response = _conversionClientService.UpdateConversationStatus(new UpdateAcceptedStatusRequest
+                {
+                    ConversationId = (int)requestModel.ConversionId,
+                    Status = updateStatusRequest.IsRequestStatus
+
+                });
+
+                Console.WriteLine(response);
+
 
                 if (requestModel != null)
                 {
@@ -232,24 +264,7 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseRequestHandlers
                 }
 
                 responseList.Responses.Add(franchiseRequestList);
-                /* foreach (var request in responseFromDB)
-                 {
-                     dynamic tempObj = new System.Dynamic.ExpandoObject();
-                     tempObj.franchiseRequest = request;
-                     response.FranchiseRequest = Google.Protobuf.WellKnownTypes.Any.Pack(tempObj.franchiseRequest);
-                     Dictionary<int, List<FranchiseCustomizedOptionModel>> franchiseCustomizedOptionModelResponse = new Dictionary<int, List<FranchiseCustomizedOptionModel>>();
-
-                     if (request.FranchiseCustomizedOption)
-                     {
-                         *//*var customizedOptionResponse = _context.FranchiseCustomizedOptionModel.Include(f => f.FranchiseSelectedServices).Where(f => f.FranchiseCustomizedOptionId == request.FranchiseCustomizedOptionId).ToList();
-
-                         franchiseCustomizedOptionModelResponse.Add(request.FranchiseCustomizedOptionId, customizedOptionResponse);
-
-                         tempObj.franchiseCustomization = franchiseCustomizedOptionModelResponse;
-                         response.FranchiseCustomization.Add(tempObj.franchiseCustomization);*//*
-                     }
-                     responseList.Responses.Add(response);
-                 }*/
+                
 
                 return responseList;
             }

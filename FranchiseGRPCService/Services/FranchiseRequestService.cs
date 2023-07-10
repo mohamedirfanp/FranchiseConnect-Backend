@@ -17,10 +17,7 @@ namespace FranchiseGRPCService.Services
 
         public override Task<FranchiseUserResponse> CreateFranchiseRequest(CreateFranchiseUserRequest request, ServerCallContext context)
         {
-            // TODO 
-            // Create Conversation between the franchisee and franchisor
-            // Send a User Data in the chat
-            // franchisor cant chat until the request accepted
+            
 
             var response = _franchiseRequestHandler.CreateFranchiseRequest(request);
 

@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Protos\account.proto" />
+    <None Remove="Protos\chat_common.proto" />
+    <None Remove="Protos\conversation.proto" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Grpc.AspNetCore" Version="2.40.0" />
@@ -28,6 +34,9 @@
   </ItemGroup>
 
 	<ItemGroup>
+		<Protobuf Include="Protos\account.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\chat_common.proto" GrpcServices="Client" />
+		<Protobuf Include="Protos\conversation.proto" GrpcServices="Client" />
 		<Protobuf Include="Protos\franchise_common.proto" GrpcServices="Server" />
 		<Protobuf Include="Protos\franchise_social.proto" GrpcServices="Server" />
 		<Protobuf Include="Protos\franchise_service.proto" GrpcServices="Server" />
