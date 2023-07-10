@@ -31,6 +31,9 @@ namespace AccoutGRPCService.Models
         [Column("user_role")]
         public string UserRole { get; set; }
 
+        [Column("profile_photo_url")]
+        public string ProfilePhotoUrl { get; set; } = "Empty";
+
         [Required]
         [Column("user_password")]
         public byte[] PasswordHash { get; set; }
