@@ -16,19 +16,20 @@ namespace AccoutGRPCService.Services
         }
 
         // A function to get User Profile
-        [Authorize]
-        public override Task<GetProfileResponse> GetProfile(Empty request, ServerCallContext context)
+        
+        public override Task<GetProfileResponse> GetProfile(GetProfileRequest profileRequest, ServerCallContext context)
         {
-            var response = _accountService.GetProfile();
+            var response = _accountService.GetProfile(profileRequest);
 
             return Task.FromResult(response);
         }
 
-        [Authorize]
         // A function to update User Profile
         public override Task<UpdateUserResponse> UpdateUser(UpdateUserRequest request, ServerCallContext context)
         {
-            return base.UpdateUser(request, context);
+            var response = _accountService.UpdateProfileForUser(request);
+
+            return Task.FromResult(response);
         }
 
     }

@@ -40,15 +40,12 @@ namespace AccoutGRPCService.Services
             return Task.FromResult(response);
         }
 
-        [Authorize]
         public override Task<ChangePasswordResponse> ChangePassword(ChangePasswordResquest request, ServerCallContext context)
         {
             var response = _authService.ChangePassword(request);
 
             return Task.FromResult(response);
         }
-
-
 
     }
 }
