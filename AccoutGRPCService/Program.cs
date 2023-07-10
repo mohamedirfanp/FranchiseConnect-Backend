@@ -32,17 +32,17 @@ namespace AccoutGRPCService
 
             // Add JWT Middleware
             builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-                .AddJwtBearer(options =>
-                {
-                    options.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters
-                    {
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
-                    .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
-                        ValidateIssuer = false,
-                        ValidateAudience = false
-                    };
-                });
+                   .AddJwtBearer(options =>
+                   {
+                       options.TokenValidationParameters = new TokenValidationParameters
+                       {
+                           ValidateIssuerSigningKey = true,
+                           IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8
+                             .GetBytes(builder.Configuration.GetSection("AppSettings:Token").Value)),
+                           ValidateIssuer = false,
+                           ValidateAudience = false
+                       };
+                   });
 
             // Add services to the container.
             builder.Services.AddGrpc();
@@ -52,12 +52,11 @@ namespace AccoutGRPCService
             builder.Services.AddScoped<IAuthHandlerService, AuthHandlerService>();
             builder.Services.AddScoped<IAccountHandlerService, AccountHandlerService>();
 
-            builder.Services.AddHttpContextAccessor();
+
 
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
-            app.MapGrpcService<GreeterService>();
             app.MapGrpcService<Services.AuthService>();
             app.MapGrpcService<Services.AccountService>();
 
