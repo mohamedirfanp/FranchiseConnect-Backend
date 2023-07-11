@@ -143,6 +143,22 @@ namespace ApiGateway.Services.FranchiseService
             }
         }
 
+        public UpdateFranchiseDetailResponse UpdateFranchise(UpdateFranchiseDetailRequest updateFranchiseDetailRequest)
+        {
+            try
+            {
+
+                var response = _grpcClients.FranchiseClient.UpdateFranchiseDetail(updateFranchiseDetailRequest);
+
+
+                return response;
+
+            }
+            catch (RpcException ex)
+            {
+                throw new RpcException(new Status(Grpc.Core.StatusCode.Unimplemented, ex.Message));
+            }
+        }
 
         // Franchise Gallery Service
         public IActionResult UploadGallery(FranchiseGalleryUploadRequest uploadRequest)

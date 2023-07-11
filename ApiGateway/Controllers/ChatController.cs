@@ -37,7 +37,7 @@ namespace ApiGateway.Controllers
         }
 
         // To Get all the Ticket for Admin
-        [HttpGet("all/tickets"), Authorize(Roles = "Admin")]
+        [HttpGet("all/tickets")]
         public GetTicketsResponse GetTicketsForAdmin()
         {
             var response = _chatService.GetTicketsForAdmin();
@@ -62,12 +62,13 @@ namespace ApiGateway.Controllers
 
 
         // To Close The Ticket
-        [HttpPut("close/Ticket"), Authorize(Roles = "Admin")]
-        public async Task<IActionResult> CloseTicket([FromBody] int tickedId)
+        [HttpDelete("close/Ticket/{ticketId}")]
+        public async Task<IActionResult> CloseTicket(int ticketId)
         {
+
             var response = _chatService.CloseTicket(new ChatPackage.CommonRequest
             {
-                RequestId = tickedId
+                RequestId = ticketId
             });
 
             if (response is BadRequestObjectResult badRequest)

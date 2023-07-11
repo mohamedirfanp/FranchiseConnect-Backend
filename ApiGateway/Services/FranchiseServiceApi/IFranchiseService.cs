@@ -19,6 +19,10 @@ namespace ApiGateway.Services.FranchiseService
         // Create a Franchise
         CreateFranchiseResponse CreateFranchise(CreateFranchiseDto request);
 
+        // A function to update Franchise Details
+
+        UpdateFranchiseDetailResponse UpdateFranchise(UpdateFranchiseDetailRequest request);
+
         // Franchise Exist or not
         FranchiseExistResponse GetFranchiseExist();
 

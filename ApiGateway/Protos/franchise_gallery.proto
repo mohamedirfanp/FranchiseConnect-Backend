@@ -20,6 +20,8 @@ message FranchiseGalleryDeleteRequest
 	int32 franchise_gallery_id = 1;
 }
 
+
+
 message FranchiseGalleryUploadRequest
 {
 	int32 franchise_id = 1;

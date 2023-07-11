@@ -70,6 +70,14 @@ namespace ApiGateway.Controllers
 			return response;
 		}
 
+		// Update Franchise Details
+		[HttpPut("update"), Authorize(Roles ="Franchisor")]
+		public UpdateFranchiseDetailResponse UpdateFranchise(UpdateFranchiseDetailRequest request)
+		{
+			var response = _franchiseService.UpdateFranchise(request);
+			return response;
+		}
+
 		// Put - Increment Franchise View Count
 		[HttpPut("update-viewcount"), Authorize]
 		public IncreseViewCountResponse UpdateViewCount([FromBody] IncreseViewCountRequest request)
@@ -95,10 +103,13 @@ namespace ApiGateway.Controllers
             return Ok(response);
         }
 
-		[HttpDelete("gallery/delete"), Authorize]
-		public IActionResult deleteGalleryRequest([FromBody] FranchiseGalleryDeleteRequest request)
+		[HttpDelete("gallery/delete/{galleryId}"), Authorize]
+		public IActionResult deleteGalleryRequest(int galleryId)
 		{
-            var response = _franchiseService.DeleteGallery(request);
+            var response = _franchiseService.DeleteGallery(new FranchiseGalleryDeleteRequest
+			{
+				FranchiseGalleryId = galleryId
+			});
 
             if (response is BadRequestObjectResult badRequest)
             {
