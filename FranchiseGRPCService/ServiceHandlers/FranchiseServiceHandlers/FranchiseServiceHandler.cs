@@ -190,14 +190,6 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseServiceHandlers
 				getFranchisesRespsonse.FranchiseGalleryList.AddRange(TypeCastingGalleryList(franchiseDetailFromDB.franchiseGallery));
 				getFranchisesRespsonse.FrachiseServiceList.AddRange(TypeCastingServiceList(franchiseDetailFromDB.franchiseServices));
 
-/*				if(franchiseDetailFromDB.FranchiseCustomizedOption)
-				{
-					*//*var customizedOption = _context.FranchiseCustomizedOptionModel.Include(f => f.FranchiseSelectedServices).FirstOrDefault(f => f.FranchiseCustomizedOptionId == franchiseDetailFromDB.FranchiseCustomizedOptionId);
-
-					getFranchisesRespsonse.FranchieSelectedServiceList.AddRange(TypeCastingSelectedSericeList(customizedOption.FranchiseSelectedServices));*//*
-
-				
-				}*/
 
 				return getFranchisesRespsonse;
 
@@ -239,6 +231,39 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseServiceHandlers
             }
         }
 
+        // A function to update franchise details
+        public UpdateFranchiseDetailResponse UpdateFranchise(UpdateFranchiseDetailRequest request)
+        {
+            try
+			{
+				var franchiseDetailFromDB = _context.FranchiseModel.Where(f => f.FranchiseId == request.Franchise.FranchiseId).FirstOrDefault();
+
+				franchiseDetailFromDB.FranchiseName = request.Franchise.FranchiseName;
+				franchiseDetailFromDB.FranchiseIndustry = request.Franchise.FranchiseIndustry;
+				franchiseDetailFromDB.FranchiseSegment = request.Franchise.FranchiseSegment;
+				franchiseDetailFromDB.FranchiseSpace = request.Franchise.FranchiseSpace;
+				franchiseDetailFromDB.FranchisePreferredExpansionLocation = request.Franchise.FranchisePreferredExpansionLocation;
+				franchiseDetailFromDB.FranchiseAbout = request.Franchise.FranchiseAbout;
+				franchiseDetailFromDB.FranchiseCustomizedOption = request.Franchise.FranchiseCustomizedOption;
+				franchiseDetailFromDB.FranchiseCurrentCount = request.Franchise.FranchiseCurrentCount;
+				franchiseDetailFromDB.FranchiseFee = request.Franchise.FranchiseFee;
+				franchiseDetailFromDB.FranchiseInvestment = request.Franchise.FranchiseInvestment;
+
+				_context.FranchiseModel.Update(franchiseDetailFromDB);
+
+				_context.SaveChanges();
+
+				return new UpdateFranchiseDetailResponse
+				{
+					Response = "Successfully Updated Details"
+				};
+
+			}
+			catch(Exception  ex)
+			{
+				throw new RpcException(new Status(StatusCode.Unknown, ex.Message));
+            }
+        }
 
 
         // Type Casting Functions

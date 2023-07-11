@@ -16,6 +16,18 @@ service FranchiseService {
 
   rpc GetFranchiseByOwnerId(GetFranchiseByOwnerIdRequest) returns (GetFranchisesRespsonse);
 
+  rpc UpdateFranchiseDetail(UpdateFranchiseDetailRequest) returns (UpdateFranchiseDetailResponse);
+
+}
+
+message UpdateFranchiseDetailRequest
+{
+	Franchise franchise = 1;
+}
+
+message UpdateFranchiseDetailResponse
+{
+	string response = 1;
 }
 
 message FranchiseExistRequest

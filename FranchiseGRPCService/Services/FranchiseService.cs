@@ -37,6 +37,12 @@ namespace FranchiseGRPCService.Services
             return Task.FromResult(response);
         }
 
+        public override Task<UpdateFranchiseDetailResponse> UpdateFranchiseDetail(UpdateFranchiseDetailRequest request, ServerCallContext context)
+        {
+            var response = _franchiseServiceHandler.UpdateFranchise(request);
+            return Task.FromResult(response);
+        }
+
         //public override Task<GetFranchisesRespsonse> GetFranchiseById(GetFranchiseByIdRequest request, ServerCallContext context)
         public override Task<GetFranchisesRespsonse> GetFranchiseById(GetFranchiseByIdRequest request, ServerCallContext context)
         {
