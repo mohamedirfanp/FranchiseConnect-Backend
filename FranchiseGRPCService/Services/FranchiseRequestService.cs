@@ -34,7 +34,6 @@ namespace FranchiseGRPCService.Services
 
         public override Task<FranchiseUserResponse> UpdateStatus(UpdateStatusRequest request, ServerCallContext context)
         {
-            Console.WriteLine("HERE " + request);
             var response = _franchiseRequestHandler.UpdateRequestStatus(request);
 
             return Task.FromResult(response);
