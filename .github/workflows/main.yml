@@ -1,0 +1,83 @@
+name: Build and Publish Docker Images
+
+on:
+  push:
+    paths:
+      - AccountGRPCService/**
+      - ChatGRPCService/**
+      - ApiGateway/**
+      - FranchiseGRPCService/**
+    branches:
+      - master
+
+ 
+
+env:
+  DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+  CONTAINER_REGISTRY: franchiseconnect.azurecr.io
+
+ 
+
+jobs:
+  build_and_publish:
+    runs-on: ubuntu-latest
+
+ 
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+ 
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+ 
+
+      - name: Log in to Container Registry
+        run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD $CONTAINER_REGISTRY
+
+ 
+
+      - name: Build and push Docker images
+        run: |
+          docker buildx create --use
+
+ 
+
+          # Build and push container 1
+          docker buildx build --platform linux/amd64,linux/arm64 --push -t $CONTAINER_REGISTRY/accountgrpcservice:latest ./AccountGRPCService
+
+ 
+
+          # Build and push container 2
+          docker buildx build --platform linux/amd64,linux/arm64 --push -t $CONTAINER_REGISTRY/chatgrpcservice:latest ./ChatGRPCService
+
+ 
+
+          # Build and push container 3
+          docker buildx build --platform linux/amd64,linux/arm64 --push -t $CONTAINER_REGISTRY/franchisegrpcservice:latest ./FranchiseGRPCService
+
+ 
+
+          # Build and push container 4
+          docker buildx build --platform linux/amd64,linux/arm64 --push -t $CONTAINER_REGISTRY/apigateway:latest ./ApiGateway
+
+ 
+
+  execute_commands:
+    needs : build_and_publish
+    runs-on: ubuntu-latest
+    steps:
+      - name: Connect to VM via SSH
+        uses: appleboy/ssh-action@master
+        with:
+          host: 20.219.77.41
+          username: ${{ secrets.AZURE_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            sudo docker-compose down
+            sudo docker-compose pull
+            sudo docker-compose up -d
