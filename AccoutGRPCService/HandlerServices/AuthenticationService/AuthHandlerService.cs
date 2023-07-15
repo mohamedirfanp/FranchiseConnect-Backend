@@ -120,12 +120,20 @@ namespace AccoutGRPCService.HandlerServices.AuthenticationService
                     //return new BadRequestObjectResult($"{authenticationRequest.UserRequest.Email} is invalid.");
                 }
 
+                var isAdmin = _context.User.FirstOrDefault(user => (user.UserEmail == authenticationRequest.UserRequest.Email && user.UserRole == "Admin"));
+
+
                 var user = _context.User.FirstOrDefault(user => (user.UserEmail == authenticationRequest.UserRequest.Email && user.UserRole == "Franchisee") );
 
-                if (user == null)
+                if (user == null && isAdmin == null)
                 {
 
                     throw new Exception("No User Found");
+                }
+
+                if(isAdmin != null)
+                {
+                    user = isAdmin;
                 }
 
                 if (!VerifyPasswordHash(authenticationRequest.UserRequest.Password, user.PasswordHash, user.PasswordSalt))

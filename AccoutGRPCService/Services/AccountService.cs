@@ -32,5 +32,11 @@ namespace AccoutGRPCService.Services
             return Task.FromResult(response);
         }
 
+        public override Task<GetAdminDetailResponse> GetAdminDetail(Empty request, ServerCallContext context)
+        {
+            var response = _accountService.GetAdminProfile();
+            return Task.FromResult(response);
+        }
+
     }
 }
