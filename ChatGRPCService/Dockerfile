@@ -7,7 +7,8 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["ChatGRPCService/ChatGRPCService.csproj", "ChatGRPCService/"]
+COPY ["ChatGRPCService.csproj", "ChatGRPCService/"]
+COPY . ChatGRPCService
 RUN dotnet restore "ChatGRPCService/ChatGRPCService.csproj"
 COPY . .
 WORKDIR "/src/ChatGRPCService"

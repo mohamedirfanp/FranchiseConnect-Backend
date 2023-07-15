@@ -7,7 +7,8 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
 WORKDIR /src
-COPY ["AccoutGRPCService/AccountGRPCService.csproj", "AccoutGRPCService/"]
+COPY ["AccountGRPCService.csproj", "AccoutGRPCService/"]
+COPY . AccoutGRPCService
 RUN dotnet restore "AccoutGRPCService/AccountGRPCService.csproj"
 COPY . .
 WORKDIR "/src/AccoutGRPCService"
