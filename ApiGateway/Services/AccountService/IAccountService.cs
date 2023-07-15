@@ -25,6 +25,10 @@ namespace ApiGateway.Services.AccountService
         // A function to Update Password
         IActionResult ChangePassword(ChangePasswordDto changePasswordRequest);
 
-       
+        // A function to Get Profile Count
+
+        GetAdminDetailResponse GetProfileCountForAdmin();
+
+
     }
 }

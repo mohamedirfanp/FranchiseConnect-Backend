@@ -112,5 +112,17 @@ namespace ApiGateway.Controllers
             return Ok(response);
 		}
 
+
+        // Profile Count
+        [HttpGet("admin/profile-count"), Authorize(Roles = "Admin")]
+        public GetAdminDetailResponse GetProfileCount()
+        {
+            var response = _accountService.GetProfileCountForAdmin();
+
+            return response;
+
+        }
+
+
 	}
 }

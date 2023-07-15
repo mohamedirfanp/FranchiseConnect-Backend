@@ -143,6 +143,18 @@ namespace ApiGateway.Services.AccountService
             }
         }
 
-       
+        public GetAdminDetailResponse GetProfileCountForAdmin()
+        {
+            try
+            {
+                var response = _grpcClients.AccountClient.GetAdminDetail(new Google.Protobuf.WellKnownTypes.Empty());
+
+                return response;
+            }
+            catch (RpcException ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
     }
 }

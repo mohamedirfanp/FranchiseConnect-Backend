@@ -7,7 +7,6 @@ option csharp_namespace = "AccoutGRPCService.Protos";
 package account;
 
 
-
 // The Account service definition.
 service AccountHandler {
 
@@ -16,6 +15,9 @@ service AccountHandler {
 
   // User Update Profile
   rpc UpdateUser (UpdateUserRequest) returns (UpdateUserResponse);
+
+  // Get For Admin
+  rpc GetAdminDetail (google.protobuf.Empty) returns (GetAdminDetailResponse);
 
 }
 
@@ -30,7 +32,12 @@ message UserDto
 	string email = 2;
 	string phoneNumber = 3;
 	string profilePhotoUrl = 4;
+}
 
+message GetAdminDetailResponse
+{
+	int32 user_count = 1;
+	int32 franchisor_count = 2;
 }
 
 message GetProfileResponse
@@ -41,7 +48,7 @@ message GetProfileResponse
 message UpdateUserRequest 
 {
 	UserDto request = 1;
-	int32 user_id = 2;
+	int32 user_id =2;
 }
 
 message UpdateUserResponse
