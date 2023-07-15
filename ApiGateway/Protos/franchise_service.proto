@@ -2,7 +2,7 @@ syntax = "proto3";
 
 package franchise;
 
-import "protos/franchise_common.proto";
+import "Protos/franchise_common.proto";
 
 
 service FranchiseServiceService {

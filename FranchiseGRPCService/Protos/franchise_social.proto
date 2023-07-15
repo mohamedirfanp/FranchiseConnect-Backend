@@ -1,7 +1,7 @@
 syntax = "proto3";
 
 
-import "protos/franchise_common.proto";
+import "Protos/franchise_common.proto";
 
 package franchise;
 

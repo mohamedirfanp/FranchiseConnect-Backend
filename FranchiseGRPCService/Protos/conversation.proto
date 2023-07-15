@@ -3,7 +3,7 @@ syntax = "proto3";
 option csharp_namespace = "ChatGRPCService.Protos";
 package chatPackage;
 
-import "protos/chat_common.proto";
+import "Protos/chat_common.proto";
 
 
 service ConversationService

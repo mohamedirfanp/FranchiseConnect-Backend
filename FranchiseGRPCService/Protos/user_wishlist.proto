@@ -4,7 +4,7 @@ option csharp_namespace = "FranchiseGRPCService.Protos";
 
 package franchise;
 
-import "protos/franchise_common.proto";
+import "Protos/franchise_common.proto";
 
 
 service UserWishListService {
