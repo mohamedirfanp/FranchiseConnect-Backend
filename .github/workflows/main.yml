@@ -3,7 +3,7 @@ name: Build and Publish Docker Images
 on:
   push:
     paths:
-      - AccountGRPCService/**
+      - AccoutGRPCService/**
       - ChatGRPCService/**
       - ApiGateway/**
       - FranchiseGRPCService/**
@@ -48,7 +48,7 @@ jobs:
  
 
           # Build and push container 1
-          docker buildx build --platform linux/amd64,linux/arm64 --push -t $CONTAINER_REGISTRY/accountgrpcservice:latest ./AccountGRPCService
+          docker buildx build --platform linux/amd64,linux/arm64 --push -t $CONTAINER_REGISTRY/accountgrpcservice:latest ./AccoutGRPCService
 
  
 
