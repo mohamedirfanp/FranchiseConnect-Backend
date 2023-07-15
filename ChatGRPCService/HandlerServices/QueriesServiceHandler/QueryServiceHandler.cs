@@ -35,7 +35,8 @@ namespace ChatGRPCService.HandlerServices.QueriesServiceHandler
 
                 return new CommonResponse
                 {
-                    Response = "Successfully Query Created"
+                    Response = "Successfully Query Created",
+                    ResponseId = newQuery.QueryId
                 };
 
             }
