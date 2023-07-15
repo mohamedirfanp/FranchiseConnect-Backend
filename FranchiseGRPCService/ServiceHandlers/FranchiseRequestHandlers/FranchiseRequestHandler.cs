@@ -49,11 +49,9 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseRequestHandlers
 
                 // Profile - Franchise Owner
                 GetProfileResponse ownerProfile = _accountClientService.GetProfile(userRequest.OwnerId);
-                Console.WriteLine(ownerProfile);
 
                 // Profile - Franchisee
                 GetProfileResponse userProfile = _accountClientService.GetProfile(userRequest.UserId);
-                Console.WriteLine(userProfile);
 
                 // Create a conversion between two party
                 // TODO - Optional - ADD profile photo link
@@ -77,8 +75,6 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseRequestHandlers
                 model.InvestmentBudget = userRequest.InvestmentBudget;
                 model.Space = userRequest.Space;
 
-
-
                 _context.FranchiseRequestModel.Add(model);
 
                 _context.SaveChanges();
@@ -95,7 +91,8 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseRequestHandlers
 
                 return new FranchiseUserResponse
                 {
-                    Response = "Successfully Request Submitted"
+                    Response = "Successfully Request Submitted",
+                    ConversionId = newConversion.ConversationId
                 };
 
             }
@@ -145,10 +142,12 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseRequestHandlers
         {
             try
             {
-                // TODO : Update Request Accepted Status in Conversation Table
-
+                //  Update Request Accepted Status in Conversation Table
+                Console.WriteLine(updateStatusRequest);
 
                 var requestModel = _context.FranchiseRequestModel.Where(f => f.FranchiseRequestId == updateStatusRequest.FranchiseRequestId).FirstOrDefault();
+
+
 
                 CommonResponse response = _conversionClientService.UpdateConversationStatus(new UpdateAcceptedStatusRequest
                 {
@@ -157,27 +156,20 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseRequestHandlers
 
                 });
 
-                Console.WriteLine(response);
 
 
-                if (requestModel != null)
-                {
-                    requestModel.IsRequestStatus = updateStatusRequest.IsRequestStatus;
 
-                    _context.FranchiseRequestModel.Update(requestModel);
-                    _context.SaveChanges();
+                requestModel.IsRequestStatus = updateStatusRequest.IsRequestStatus;
 
-                    return new FranchiseUserResponse
-                    {
-                        Response = "Successfully Updated"
-                    };
-
-                }
+                _context.FranchiseRequestModel.Update(requestModel);
+                _context.SaveChanges();
 
                 return new FranchiseUserResponse
                 {
-                    Response = "No Request Found"
+                    Response = "Successfully Updated",
+                    ConversionId = 0
                 };
+
             }
             catch(Exception ex)
             {
