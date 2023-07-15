@@ -254,6 +254,7 @@ namespace ApiGateway.Services.FranchiseService
             }
         }
 
+
         // To get pending requests
         public FranchiseRequestResponseList GetAllFranchiseRequest()
         {
