@@ -143,8 +143,7 @@ namespace FranchiseGRPCService.ServiceHandlers.FranchiseRequestHandlers
             try
             {
                 //  Update Request Accepted Status in Conversation Table
-                Console.WriteLine(updateStatusRequest);
-
+    
                 var requestModel = _context.FranchiseRequestModel.Where(f => f.FranchiseRequestId == updateStatusRequest.FranchiseRequestId).FirstOrDefault();
 
 
