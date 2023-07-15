@@ -14,7 +14,9 @@ namespace AccoutGRPCService.HandlerServices.AccountServices
 
         UpdateUserResponse UpdateProfileForUser(UpdateUserRequest user);
 
+        // To get the user and franchisor count 
 
+        GetAdminDetailResponse GetAdminProfile();
 
     }
 }

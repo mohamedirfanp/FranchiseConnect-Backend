@@ -4,6 +4,7 @@ using AccoutGRPCService.Protos;
 using Grpc.Core;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
+using Google.Protobuf.WellKnownTypes;
 
 namespace AccoutGRPCService.HandlerServices.AccountServices
 {
@@ -17,7 +18,31 @@ namespace AccoutGRPCService.HandlerServices.AccountServices
 			_context = context;
 		}
 
-		public GetProfileResponse GetProfile(GetProfileRequest profileRequest)
+        public GetAdminDetailResponse GetAdminProfile()
+        {
+            try
+            {
+
+                var userCount = _context.User.Count(user => user.UserRole == "Franchisee");
+                var franchisorCount = _context.User.Count(user => user.UserRole == "Franchisor");
+
+                GetAdminDetailResponse response = new GetAdminDetailResponse
+                {
+                    FranchisorCount = franchisorCount,
+                    UserCount = userCount
+                };
+
+                return response;
+
+            }
+            catch (Exception ex)
+            {
+                throw new RpcException(new Status(StatusCode.Unknown, ex.Message));
+
+            }
+        }
+
+        public GetProfileResponse GetProfile(GetProfileRequest profileRequest)
 		{
 			try
 			{
@@ -78,5 +103,8 @@ namespace AccoutGRPCService.HandlerServices.AccountServices
 			}
 		}
 
-	}
+ 
+		
+
+    }
 }
